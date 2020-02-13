@@ -11,7 +11,7 @@
       If cbText <> My.Computer.Clipboard.GetText() Then
         cbText = My.Computer.Clipboard.GetText()
         lblCBContents.Text = cbText
-        lbxClipboardBuffer.Items.Insert(0, cbText)
+        lbxClipboardBuffer.Items.Insert(0, "<" + cbText + ">")
         tsslCmd.Text = "HTML"
       Else
         lblCBContents.Text = "HTML: No change: " + cbText
@@ -23,7 +23,7 @@
       If cbText <> My.Computer.Clipboard.GetText() Then
         cbText = My.Computer.Clipboard.GetText()
         lblCBContents.Text = cbText
-        lbxClipboardBuffer.Items.Insert(0, cbText)
+        lbxClipboardBuffer.Items.Insert(0, "<" + cbText + ">")
         tsslCmd.Text = "Text"
       Else
         lblCBContents.Text = "No change:" + cbText
