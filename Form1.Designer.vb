@@ -39,6 +39,8 @@ Partial Class Form1
         Me.tsslCount = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tsslCmd = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.btnGetCB = New System.Windows.Forms.Button()
+        Me.cbxTmrEn = New System.Windows.Forms.CheckBox()
         CType(Me.splMain, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.splMain.Panel1.SuspendLayout()
         Me.splMain.Panel2.SuspendLayout()
@@ -121,6 +123,8 @@ Partial Class Form1
         '
         'Panel1
         '
+        Me.Panel1.Controls.Add(Me.cbxTmrEn)
+        Me.Panel1.Controls.Add(Me.btnGetCB)
         Me.Panel1.Controls.Add(Me.btnClearClipboard)
         Me.Panel1.Controls.Add(Me.btnClearBuffer)
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
@@ -151,7 +155,6 @@ Partial Class Form1
         '
         'Timer1
         '
-        Me.Timer1.Enabled = True
         Me.Timer1.Interval = 10
         '
         'NotifyIcon1
@@ -186,8 +189,26 @@ Partial Class Form1
         Me.tsslCmd.Size = New System.Drawing.Size(33, 17)
         Me.tsslCmd.Text = "Cmd"
         '
-        'ToolTip1
+        'btnGetCB
         '
+        Me.btnGetCB.Dock = System.Windows.Forms.DockStyle.Left
+        Me.btnGetCB.Location = New System.Drawing.Point(162, 0)
+        Me.btnGetCB.Name = "btnGetCB"
+        Me.btnGetCB.Size = New System.Drawing.Size(75, 29)
+        Me.btnGetCB.TabIndex = 8
+        Me.btnGetCB.Text = "Get CB"
+        Me.btnGetCB.UseVisualStyleBackColor = True
+        '
+        'cbxTmrEn
+        '
+        Me.cbxTmrEn.Anchor = System.Windows.Forms.AnchorStyles.Left
+        Me.cbxTmrEn.AutoSize = True
+        Me.cbxTmrEn.Location = New System.Drawing.Point(243, 7)
+        Me.cbxTmrEn.Name = "cbxTmrEn"
+        Me.cbxTmrEn.Size = New System.Drawing.Size(63, 17)
+        Me.cbxTmrEn.TabIndex = 9
+        Me.cbxTmrEn.Text = "Capture"
+        Me.cbxTmrEn.UseVisualStyleBackColor = True
         '
         'Form1
         '
@@ -197,7 +218,7 @@ Partial Class Form1
         Me.Controls.Add(Me.ssMain)
         Me.Controls.Add(Me.splMain)
         Me.Name = "Form1"
-        Me.Text = "Form1"
+        Me.Text = "Clipboard++"
         Me.splMain.Panel1.ResumeLayout(False)
         Me.splMain.Panel1.PerformLayout()
         Me.splMain.Panel2.ResumeLayout(False)
@@ -206,6 +227,7 @@ Partial Class Form1
         Me.GroupBox1.ResumeLayout(False)
         Me.Panel2.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
         Me.ssMain.ResumeLayout(False)
         Me.ssMain.PerformLayout()
         Me.ResumeLayout(False)
@@ -229,4 +251,6 @@ Partial Class Form1
   Friend WithEvents ToolTip1 As ToolTip
   Friend WithEvents Panel2 As Panel
   Friend WithEvents lbxClipboardBuffer As ListBox
+    Friend WithEvents btnGetCB As Button
+    Friend WithEvents cbxTmrEn As CheckBox
 End Class
