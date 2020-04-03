@@ -26,6 +26,8 @@ Partial Class Form1
         Me.lblCBContents = New System.Windows.Forms.Label()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.splMain = New System.Windows.Forms.SplitContainer()
+        Me.lblFreq = New System.Windows.Forms.Label()
+        Me.cbxMostFreq = New System.Windows.Forms.ComboBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
@@ -47,6 +49,12 @@ Partial Class Form1
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.EventLog1 = New System.Diagnostics.EventLog()
         Me.Label2 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.lblFirst = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.lblSecond = New System.Windows.Forms.Label()
+        Me.lblThird = New System.Windows.Forms.Label()
         CType(Me.splMain, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.splMain.Panel1.SuspendLayout()
         Me.splMain.Panel2.SuspendLayout()
@@ -92,17 +100,44 @@ Partial Class Form1
         '
         'splMain.Panel1
         '
+        Me.splMain.Panel1.Controls.Add(Me.lblThird)
+        Me.splMain.Panel1.Controls.Add(Me.lblSecond)
+        Me.splMain.Panel1.Controls.Add(Me.Label6)
+        Me.splMain.Panel1.Controls.Add(Me.Label5)
+        Me.splMain.Panel1.Controls.Add(Me.lblFirst)
+        Me.splMain.Panel1.Controls.Add(Me.Label3)
         Me.splMain.Panel1.Controls.Add(Me.Label2)
+        Me.splMain.Panel1.Controls.Add(Me.lblFreq)
+        Me.splMain.Panel1.Controls.Add(Me.cbxMostFreq)
         Me.splMain.Panel1.Controls.Add(Me.lblCBContents)
         Me.splMain.Panel1.Controls.Add(Me.Label1)
         '
         'splMain.Panel2
         '
         Me.splMain.Panel2.Controls.Add(Me.GroupBox1)
-        Me.splMain.Size = New System.Drawing.Size(405, 516)
-        Me.splMain.SplitterDistance = 36
+        Me.splMain.Size = New System.Drawing.Size(429, 516)
+        Me.splMain.SplitterDistance = 74
         Me.splMain.SplitterWidth = 10
         Me.splMain.TabIndex = 3
+        '
+        'lblFreq
+        '
+        Me.lblFreq.AutoSize = True
+        Me.lblFreq.Location = New System.Drawing.Point(12, 27)
+        Me.lblFreq.Name = "lblFreq"
+        Me.lblFreq.Size = New System.Drawing.Size(75, 13)
+        Me.lblFreq.TabIndex = 3
+        Me.lblFreq.Text = "Most frequent:"
+        '
+        'cbxMostFreq
+        '
+        Me.cbxMostFreq.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cbxMostFreq.FormattingEnabled = True
+        Me.cbxMostFreq.Location = New System.Drawing.Point(93, 24)
+        Me.cbxMostFreq.Name = "cbxMostFreq"
+        Me.cbxMostFreq.Size = New System.Drawing.Size(330, 21)
+        Me.cbxMostFreq.TabIndex = 2
         '
         'GroupBox1
         '
@@ -111,7 +146,7 @@ Partial Class Form1
         Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(405, 470)
+        Me.GroupBox1.Size = New System.Drawing.Size(429, 432)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Clipboard History"
@@ -122,7 +157,7 @@ Partial Class Form1
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(3, 45)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(399, 422)
+        Me.Panel2.Size = New System.Drawing.Size(423, 384)
         Me.Panel2.TabIndex = 7
         '
         'SplitContainer1
@@ -139,8 +174,8 @@ Partial Class Form1
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.gbConsole)
-        Me.SplitContainer1.Size = New System.Drawing.Size(399, 422)
-        Me.SplitContainer1.SplitterDistance = 249
+        Me.SplitContainer1.Size = New System.Drawing.Size(423, 384)
+        Me.SplitContainer1.SplitterDistance = 226
         Me.SplitContainer1.TabIndex = 6
         '
         'gbBuffer
@@ -149,7 +184,7 @@ Partial Class Form1
         Me.gbBuffer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbBuffer.Location = New System.Drawing.Point(0, 0)
         Me.gbBuffer.Name = "gbBuffer"
-        Me.gbBuffer.Size = New System.Drawing.Size(399, 249)
+        Me.gbBuffer.Size = New System.Drawing.Size(423, 226)
         Me.gbBuffer.TabIndex = 0
         Me.gbBuffer.TabStop = False
         Me.gbBuffer.Text = "Buffer"
@@ -162,7 +197,7 @@ Partial Class Form1
         Me.lbxClipboardBuffer.Location = New System.Drawing.Point(3, 16)
         Me.lbxClipboardBuffer.Name = "lbxClipboardBuffer"
         Me.lbxClipboardBuffer.ScrollAlwaysVisible = True
-        Me.lbxClipboardBuffer.Size = New System.Drawing.Size(393, 230)
+        Me.lbxClipboardBuffer.Size = New System.Drawing.Size(417, 207)
         Me.lbxClipboardBuffer.TabIndex = 6
         '
         'gbConsole
@@ -171,7 +206,7 @@ Partial Class Form1
         Me.gbConsole.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbConsole.Location = New System.Drawing.Point(0, 0)
         Me.gbConsole.Name = "gbConsole"
-        Me.gbConsole.Size = New System.Drawing.Size(399, 169)
+        Me.gbConsole.Size = New System.Drawing.Size(423, 154)
         Me.gbConsole.TabIndex = 0
         Me.gbConsole.TabStop = False
         Me.gbConsole.Text = "Console"
@@ -182,7 +217,7 @@ Partial Class Form1
         Me.lbxConsole.FormattingEnabled = True
         Me.lbxConsole.Location = New System.Drawing.Point(3, 16)
         Me.lbxConsole.Name = "lbxConsole"
-        Me.lbxConsole.Size = New System.Drawing.Size(393, 150)
+        Me.lbxConsole.Size = New System.Drawing.Size(417, 135)
         Me.lbxConsole.TabIndex = 0
         '
         'Panel1
@@ -194,7 +229,7 @@ Partial Class Form1
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(3, 16)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(399, 29)
+        Me.Panel1.Size = New System.Drawing.Size(423, 29)
         Me.Panel1.TabIndex = 6
         '
         'cbxTmrEn
@@ -252,7 +287,7 @@ Partial Class Form1
         Me.ssMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsslStatus, Me.tsslCount, Me.tsslCmd})
         Me.ssMain.Location = New System.Drawing.Point(0, 494)
         Me.ssMain.Name = "ssMain"
-        Me.ssMain.Size = New System.Drawing.Size(405, 22)
+        Me.ssMain.Size = New System.Drawing.Size(429, 22)
         Me.ssMain.TabIndex = 4
         Me.ssMain.Text = "StatusStrip1"
         '
@@ -282,20 +317,82 @@ Partial Class Form1
         '
         'Label2
         '
+        Me.Label2.AutoEllipsis = True
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(213, 8)
+        Me.Label2.Location = New System.Drawing.Point(12, 48)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(39, 13)
-        Me.Label2.TabIndex = 1
-        Me.Label2.Text = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(91, 13)
+        Me.Label2.TabIndex = 4
+        Me.Label2.Text = "Three top favorite"
+        '
+        'Label3
+        '
+        Me.Label3.AutoEllipsis = True
+        Me.Label3.AutoSize = True
+        Me.Label3.Location = New System.Drawing.Point(106, 48)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(20, 13)
+        Me.Label3.TabIndex = 5
+        Me.Label3.Text = "#1"
+        '
+        'lblFirst
+        '
+        Me.lblFirst.AutoEllipsis = True
+        Me.lblFirst.AutoSize = True
+        Me.lblFirst.Location = New System.Drawing.Point(127, 48)
+        Me.lblFirst.Name = "lblFirst"
+        Me.lblFirst.Size = New System.Drawing.Size(31, 13)
+        Me.lblFirst.TabIndex = 6
+        Me.lblFirst.Text = "Fav1"
+        '
+        'Label5
+        '
+        Me.Label5.AutoEllipsis = True
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(289, 48)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(20, 13)
+        Me.Label5.TabIndex = 7
+        Me.Label5.Text = "#3"
+        '
+        'Label6
+        '
+        Me.Label6.AutoEllipsis = True
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(192, 48)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(20, 13)
+        Me.Label6.TabIndex = 8
+        Me.Label6.Text = "#2"
+        '
+        'lblSecond
+        '
+        Me.lblSecond.AutoEllipsis = True
+        Me.lblSecond.AutoSize = True
+        Me.lblSecond.Location = New System.Drawing.Point(218, 48)
+        Me.lblSecond.Name = "lblSecond"
+        Me.lblSecond.Size = New System.Drawing.Size(34, 13)
+        Me.lblSecond.TabIndex = 9
+        Me.lblSecond.Text = "Fav 3"
+        '
+        'lblThird
+        '
+        Me.lblThird.AutoEllipsis = True
+        Me.lblThird.AutoSize = True
+        Me.lblThird.Location = New System.Drawing.Point(311, 48)
+        Me.lblThird.Name = "lblThird"
+        Me.lblThird.Size = New System.Drawing.Size(34, 13)
+        Me.lblThird.TabIndex = 10
+        Me.lblThird.Text = "Fav 3"
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(405, 516)
+        Me.ClientSize = New System.Drawing.Size(429, 516)
         Me.Controls.Add(Me.ssMain)
         Me.Controls.Add(Me.splMain)
+        Me.MinimumSize = New System.Drawing.Size(400, 450)
         Me.Name = "Form1"
         Me.Text = "Clipboard++"
         Me.splMain.Panel1.ResumeLayout(False)
@@ -344,5 +441,13 @@ Partial Class Form1
     Friend WithEvents gbConsole As GroupBox
     Friend WithEvents EventLog1 As EventLog
     Friend WithEvents lbxConsole As ListBox
+    Friend WithEvents cbxMostFreq As ComboBox
+    Friend WithEvents lblFreq As Label
+    Friend WithEvents lblFirst As Label
+    Friend WithEvents Label3 As Label
     Friend WithEvents Label2 As Label
+    Friend WithEvents Label5 As Label
+    Friend WithEvents lblThird As Label
+    Friend WithEvents lblSecond As Label
+    Friend WithEvents Label6 As Label
 End Class

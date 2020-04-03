@@ -1,16 +1,20 @@
-﻿Public Class Form1
+﻿
+Public Class Form1
   Dim cbData As IDataObject = Clipboard.GetDataObject()
   Dim cbContent As String
   Dim iCount As Integer
-  Dim buffer As IList(Of Object)
+  Dim cboBuffer As IList(Of cbObject)
   Dim tmrEn As Boolean
 
+  '----------------------------------------------------------------------------
   Private Sub AddMsg(msg As String)
     Dim prfx As String
     Dim totMsg As String
 
-
+    '---Get the method name
     prfx = (New System.Diagnostics.StackTrace).GetFrame(1).GetMethod.Name
+
+
     If msg IsNot "" Then
       totMsg = prfx + "->" + msg
 
@@ -34,7 +38,7 @@
     AddMsg("s")
     cbContent = ""
     iCount = 0
-    buffer = New List(Of Object)
+    cboBuffer = New List(Of cbObject)
     tmrEn = True
     Timer1.Enabled = tmrEn
     cbxTmrEn.Checked = tmrEn
@@ -47,7 +51,6 @@
     Dim wrappedString As String
     Dim retVal As Integer
     Dim cbContentNew As String = My.Computer.Clipboard.GetText()
-    Label2.Text = cbContentNew
 
     If cbContent <> cbContentNew Then
       AddMsg("New CB content")
@@ -62,10 +65,12 @@
         wrappedString = "<" + cbContent + ">"
       End If
 
-      Dim tmpList As IList(Of Object) = New List(Of Object)({cbContent, wrappedString})
+      Dim tmpCBObj As New cbObject(cbContent)
 
-      buffer.Insert(0, tmpList)
-      lbxClipboardBuffer.Items.Insert(0, wrappedString)
+
+
+      cboBuffer.Insert(0, tmpCBObj)
+      lbxClipboardBuffer.Items.Insert(0, tmpCBObj.WrappedName)
 
       retVal = 1
     Else
@@ -117,6 +122,7 @@
   Private Sub btnClearBuffer_Click(sender As Object, e As EventArgs) Handles btnClearBuffer.Click
     AddMsg("s")
     lbxClipboardBuffer.Items.Clear()
+    cboBuffer.Clear()
     lblCBContents.Text = "Clear Buffer"
     cbContent = ""
     AddMsg("d")
@@ -126,35 +132,39 @@
   ' Desc: Given the lbx item index, returns the item text
   '----------------------------------------------------------------------------
   Private Sub extractCBData(ByVal idx As Integer)
-
-    Dim tmpObj = buffer.Item(idx)
-    Dim n As Integer = 0
     AddMsg("s")
+    AddMsg("Get CBO index")
+    Dim tmpCBObj = cboBuffer.Item(idx)
 
-    For Each i As Object In tmpObj
-      If n = 0 Then
-        cbContent = i.ToString
-      End If
+    AddMsg("Copy CBO name (unwrapped) to cbContent")
 
-      n += 1
-    Next
+    cbContent = tmpCBObj.Name
+
+
     AddMsg("d")
   End Sub
 
 
   '----------------------------------------------------------------------------
-  Private Sub lbxClipboardBuffer_DoubleClick(sender As Object, e As EventArgs)
+  Private Sub lbxClipboardBuffer_DoubleClick(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.DoubleClick
     Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
+    Dim tmpName As String
     AddMsg("s")
-    '---Get item data
+    AddMsg("Get item data")
     extractCBData(idx)
 
     If cbContent <> "" Then
-      '---Assign the CB to the dbl clicked item data
+      AddMsg("Assign the CB to the dbl clicked item data")
       My.Computer.Clipboard.SetText(cbContent)
       If cbContent.Length < 127 Then
+        AddMsg("str < 127 chars")
         tsslCmd.Text = cbContent
         lblCBContents.Text = cbContent
+      Else
+        AddMsg("str > 127 chars")
+        tmpName = Strings.Left(cbContent, 45)
+        tsslCmd.Text = tmpName
+        lblCBContents.Text = tmpName
       End If
     End If
     AddMsg("d")
@@ -162,7 +172,7 @@
 
   '----------------------------------------------------------------------------
   Private Sub btnClearClipboard_Click(sender As Object, e As EventArgs) Handles btnClearClipboard.Click
-    AddMsg("s")
+    AddMsg("Clear Clipboard")
     cbContent = ""
     My.Computer.Clipboard.Clear()
     lblCBContents.Text = "<empty>"
@@ -193,15 +203,7 @@
     AddMsg("d")
   End Sub
 
-  Private Sub lbxClipboardBuffer_SelectedIndexChanged(sender As Object, e As EventArgs)
-
-  End Sub
-
-  Private Sub lblCBContents_Click(sender As Object, e As EventArgs) Handles lblCBContents.Click
-
-  End Sub
-
-  Private Sub SplitContainer1_Panel1_Paint(sender As Object, e As PaintEventArgs) Handles SplitContainer1.Panel1.Paint
+  Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
 
   End Sub
 End Class
