@@ -53,9 +53,14 @@ Partial Class Form1
     Me.tsslStatus = New System.Windows.Forms.ToolStripStatusLabel()
     Me.tsslCount = New System.Windows.Forms.ToolStripStatusLabel()
     Me.tsslCmd = New System.Windows.Forms.ToolStripStatusLabel()
-    Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-    Me.EventLog1 = New System.Diagnostics.EventLog()
         Me.tsslCopyCount = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.EventLog1 = New System.Diagnostics.EventLog()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.tbpBufferRaw = New System.Windows.Forms.TabPage()
+        Me.tbpUnique = New System.Windows.Forms.TabPage()
+        Me.lbxUniqueBuffer = New System.Windows.Forms.ListBox()
+        Me.tsslCOCout = New System.Windows.Forms.ToolStripStatusLabel()
         CType(Me.splMain, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.splMain.Panel1.SuspendLayout()
         Me.splMain.Panel2.SuspendLayout()
@@ -71,6 +76,9 @@ Partial Class Form1
         Me.Panel1.SuspendLayout()
         Me.ssMain.SuspendLayout()
         CType(Me.EventLog1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.TabControl1.SuspendLayout()
+        Me.tbpBufferRaw.SuspendLayout()
+        Me.tbpUnique.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblCBContents
@@ -268,7 +276,7 @@ Partial Class Form1
         '
         'gbBuffer
         '
-        Me.gbBuffer.Controls.Add(Me.lbxClipboardBuffer)
+        Me.gbBuffer.Controls.Add(Me.TabControl1)
         Me.gbBuffer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.gbBuffer.Location = New System.Drawing.Point(0, 0)
         Me.gbBuffer.Margin = New System.Windows.Forms.Padding(4)
@@ -285,11 +293,11 @@ Partial Class Form1
         Me.lbxClipboardBuffer.FormattingEnabled = True
         Me.lbxClipboardBuffer.HorizontalScrollbar = True
         Me.lbxClipboardBuffer.ItemHeight = 16
-        Me.lbxClipboardBuffer.Location = New System.Drawing.Point(4, 19)
+        Me.lbxClipboardBuffer.Location = New System.Drawing.Point(3, 3)
         Me.lbxClipboardBuffer.Margin = New System.Windows.Forms.Padding(4)
         Me.lbxClipboardBuffer.Name = "lbxClipboardBuffer"
         Me.lbxClipboardBuffer.ScrollAlwaysVisible = True
-        Me.lbxClipboardBuffer.Size = New System.Drawing.Size(496, 190)
+        Me.lbxClipboardBuffer.Size = New System.Drawing.Size(482, 155)
         Me.lbxClipboardBuffer.TabIndex = 6
         '
         'gbConsole
@@ -385,7 +393,7 @@ Partial Class Form1
         '
         'ssMain
         '
-        Me.ssMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsslStatus, Me.tsslCount, Me.tsslCmd, Me.tsslCopyCount})
+        Me.ssMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsslStatus, Me.tsslCount, Me.tsslCmd, Me.tsslCopyCount, Me.tsslCOCout})
         Me.ssMain.Location = New System.Drawing.Point(0, 484)
         Me.ssMain.Name = "ssMain"
         Me.ssMain.Padding = New System.Windows.Forms.Padding(1, 0, 19, 0)
@@ -413,15 +421,64 @@ Partial Class Form1
         Me.tsslCmd.Size = New System.Drawing.Size(33, 17)
         Me.tsslCmd.Text = "Cmd"
         '
-        'EventLog1
-        '
-        Me.EventLog1.SynchronizingObject = Me
-        '
         'tsslCopyCount
         '
         Me.tsslCopyCount.Name = "tsslCopyCount"
         Me.tsslCopyCount.Size = New System.Drawing.Size(71, 17)
         Me.tsslCopyCount.Text = "Copy Count"
+        '
+        'EventLog1
+        '
+        Me.EventLog1.SynchronizingObject = Me
+        '
+        'TabControl1
+        '
+        Me.TabControl1.Controls.Add(Me.tbpBufferRaw)
+        Me.TabControl1.Controls.Add(Me.tbpUnique)
+        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl1.Location = New System.Drawing.Point(4, 19)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(496, 190)
+        Me.TabControl1.TabIndex = 7
+        '
+        'tbpBufferRaw
+        '
+        Me.tbpBufferRaw.Controls.Add(Me.lbxClipboardBuffer)
+        Me.tbpBufferRaw.Location = New System.Drawing.Point(4, 25)
+        Me.tbpBufferRaw.Name = "tbpBufferRaw"
+        Me.tbpBufferRaw.Padding = New System.Windows.Forms.Padding(3)
+        Me.tbpBufferRaw.Size = New System.Drawing.Size(488, 161)
+        Me.tbpBufferRaw.TabIndex = 0
+        Me.tbpBufferRaw.Text = "Buffer"
+        Me.tbpBufferRaw.UseVisualStyleBackColor = True
+        '
+        'tbpUnique
+        '
+        Me.tbpUnique.Controls.Add(Me.lbxUniqueBuffer)
+        Me.tbpUnique.Location = New System.Drawing.Point(4, 25)
+        Me.tbpUnique.Name = "tbpUnique"
+        Me.tbpUnique.Padding = New System.Windows.Forms.Padding(3)
+        Me.tbpUnique.Size = New System.Drawing.Size(488, 161)
+        Me.tbpUnique.TabIndex = 1
+        Me.tbpUnique.Text = "Ranked Buffer"
+        Me.tbpUnique.UseVisualStyleBackColor = True
+        '
+        'lbxUniqueBuffer
+        '
+        Me.lbxUniqueBuffer.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbxUniqueBuffer.FormattingEnabled = True
+        Me.lbxUniqueBuffer.ItemHeight = 16
+        Me.lbxUniqueBuffer.Location = New System.Drawing.Point(3, 3)
+        Me.lbxUniqueBuffer.Name = "lbxUniqueBuffer"
+        Me.lbxUniqueBuffer.Size = New System.Drawing.Size(482, 155)
+        Me.lbxUniqueBuffer.TabIndex = 0
+        '
+        'tsslCOCout
+        '
+        Me.tsslCOCout.Name = "tsslCOCout"
+        Me.tsslCOCout.Size = New System.Drawing.Size(63, 17)
+        Me.tsslCOCout.Text = "CO Count:"
         '
         'Form1
         '
@@ -452,6 +509,9 @@ Partial Class Form1
         Me.ssMain.ResumeLayout(False)
         Me.ssMain.PerformLayout()
         CType(Me.EventLog1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.TabControl1.ResumeLayout(False)
+        Me.tbpBufferRaw.ResumeLayout(False)
+        Me.tbpUnique.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -490,4 +550,9 @@ Partial Class Form1
   Friend WithEvents lblSecond As Label
   Friend WithEvents lblFav1Label As Label
     Friend WithEvents tsslCopyCount As ToolStripStatusLabel
+    Friend WithEvents TabControl1 As TabControl
+    Friend WithEvents tbpBufferRaw As TabPage
+    Friend WithEvents tbpUnique As TabPage
+    Friend WithEvents lbxUniqueBuffer As ListBox
+    Friend WithEvents tsslCOCout As ToolStripStatusLabel
 End Class

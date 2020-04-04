@@ -4,6 +4,8 @@ Public Class Form1
   Dim iCount As Integer
   Dim copyCount As Integer
   Dim cboBufferList As IList(Of cbObject)
+  Dim cboUniqueList As IList(Of cbObject)
+  Dim coUnique As Collection
   Dim currentCBO As cbObject
   Dim tmrEnable As Boolean
 
@@ -43,6 +45,8 @@ Public Class Form1
     copyCount = 0
     iCount = 0
     cboBufferList = New List(Of cbObject)
+    cboUniqueList = New List(Of cbObject)
+    coUnique = New Collection
     currentCBO = New cbObject("")
     tmrEnable = True
     Timer1.Enabled = tmrEnable
@@ -77,14 +81,23 @@ Public Class Form1
       AddMsg("New CB content")
       currentCBO = New cbObject(My.Computer.Clipboard.GetText())
 
+      If cbDupCnt = 0 Then
+        AddMsg("Unique CB content: add to ranking list")
+        cboUniqueList.Insert(0, currentCBO)
+        coUnique.Add(currentCBO)
+      Else
+        AddMsg("Not unique: Don't add, only increment")
+      End If
 
       cboBufferList.Insert(0, currentCBO)
+
       lbxClipboardBuffer.Items.Insert(0, currentCBO.WrappedName)
 
       lblCBContents.Text = currentCBO.ShortName
 
       copyCount += 1
       tsslCopyCount.Text = "Copy Count:" & copyCount
+      tsslCOCout.Text = "CO Count:" & coUnique.Count
       retVal = 1
     Else
       retVal = 0
