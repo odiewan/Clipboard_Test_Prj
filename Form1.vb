@@ -1,10 +1,11 @@
 ﻿
 Public Class Form1
   Dim cbData As IDataObject = Clipboard.GetDataObject()
-  Dim cbContent As String
   Dim iCount As Integer
-  Dim cboBuffer As IList(Of cbObject)
-  Dim tmrEn As Boolean
+  Dim copyCount As Integer
+  Dim cboBufferList As IList(Of cbObject)
+  Dim currentCBO As cbObject
+  Dim tmrEnable As Boolean
 
   '----------------------------------------------------------------------------
   Private Sub AddMsg(msg As String)
@@ -16,16 +17,19 @@ Public Class Form1
 
 
     If msg IsNot "" Then
-      totMsg = prfx + "->" + msg
 
-    ElseIf msg = "s" Then
-      totMsg = prfx + "->Start"
+      If msg = "s" Then
+        totMsg = prfx + "->Start"
 
-    ElseIf msg = "d" Then
-      totMsg = prfx + "->Done"
+      ElseIf msg = "d" Then
+        totMsg = prfx + "->Done"
+      Else
+
+        totMsg = prfx + "->" + msg
+      End If
 
     Else
-      totMsg = prfx
+        totMsg = prfx
     End If
 
     Debug.WriteLine(totMsg)
@@ -36,42 +40,51 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     AddMsg("s")
-    cbContent = ""
+    copyCount = 0
     iCount = 0
-    cboBuffer = New List(Of cbObject)
-    tmrEn = True
-    Timer1.Enabled = tmrEn
-    cbxTmrEn.Checked = tmrEn
+    cboBufferList = New List(Of cbObject)
+    currentCBO = New cbObject("")
+    tmrEnable = True
+    Timer1.Enabled = tmrEnable
+    cbxTmrEn.Checked = tmrEnable
     AddMsg("d")
   End Sub
 
   '----------------------------------------------------------------------------
   Private Function procNewCBData() As Integer
 
-    Dim wrappedString As String
     Dim retVal As Integer
+    Dim cbChanged As Boolean = False
+    Dim cbDupCnt As Integer = 0
     Dim cbContentNew As String = My.Computer.Clipboard.GetText()
 
-    If cbContent <> cbContentNew Then
+    If currentCBO.Name <> cbContentNew Then
+      AddMsg("Look for duplicates")
+      For Each cbObj As cbObject In cboBufferList
+        If cbContentNew = cbObj.Name Then
+          cbObj.cboIncCount()
+          cbDupCnt += 1
+          AddMsg("Duplicate found:" & cbObj.Count)
+        End If
+      Next
+
+      If cbDupCnt = 0 Then
+        AddMsg("No duplicates found")
+      End If
+
+
+
       AddMsg("New CB content")
-      cbContent = My.Computer.Clipboard.GetText()
-      If cbContent.Length < 127 Then
-        lblCBContents.Text = cbContent
-      End If
-
-      If cbContent = "" Then
-        wrappedString = "<EMPTY>"
-      Else
-        wrappedString = "<" + cbContent + ">"
-      End If
-
-      Dim tmpCBObj As New cbObject(cbContent)
+      currentCBO = New cbObject(My.Computer.Clipboard.GetText())
 
 
+      cboBufferList.Insert(0, currentCBO)
+      lbxClipboardBuffer.Items.Insert(0, currentCBO.WrappedName)
 
-      cboBuffer.Insert(0, tmpCBObj)
-      lbxClipboardBuffer.Items.Insert(0, tmpCBObj.WrappedName)
+      lblCBContents.Text = currentCBO.ShortName
 
+      copyCount += 1
+      tsslCopyCount.Text = "Copy Count:" & copyCount
       retVal = 1
     Else
       retVal = 0
@@ -122,9 +135,8 @@ Public Class Form1
   Private Sub btnClearBuffer_Click(sender As Object, e As EventArgs) Handles btnClearBuffer.Click
     AddMsg("s")
     lbxClipboardBuffer.Items.Clear()
-    cboBuffer.Clear()
+    cboBufferList.Clear()
     lblCBContents.Text = "Clear Buffer"
-    cbContent = ""
     AddMsg("d")
   End Sub
 
@@ -133,13 +145,13 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub extractCBData(ByVal idx As Integer)
     AddMsg("s")
-    AddMsg("Get CBO index")
-    Dim tmpCBObj = cboBuffer.Item(idx)
+    If idx >= 0 Then
+      AddMsg("Get CBO index")
+      currentCBO = cboBufferList.Item(idx)
 
-    AddMsg("Copy CBO name (unwrapped) to cbContent")
-
-    cbContent = tmpCBObj.Name
-
+    Else
+      AddMsg("Buffer is empty")
+    End If
 
     AddMsg("d")
   End Sub
@@ -148,24 +160,17 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub lbxClipboardBuffer_DoubleClick(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.DoubleClick
     Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
-    Dim tmpName As String
+
     AddMsg("s")
     AddMsg("Get item data")
     extractCBData(idx)
 
-    If cbContent <> "" Then
+    If currentCBO.Name <> "" Then
       AddMsg("Assign the CB to the dbl clicked item data")
-      My.Computer.Clipboard.SetText(cbContent)
-      If cbContent.Length < 127 Then
-        AddMsg("str < 127 chars")
-        tsslCmd.Text = cbContent
-        lblCBContents.Text = cbContent
-      Else
-        AddMsg("str > 127 chars")
-        tmpName = Strings.Left(cbContent, 45)
-        tsslCmd.Text = tmpName
-        lblCBContents.Text = tmpName
-      End If
+      My.Computer.Clipboard.SetText(currentCBO.Name)
+      tsslCmd.Text = currentCBO.Name
+      lblCBContents.Text = currentCBO.ShortName
+
     End If
     AddMsg("d")
   End Sub
@@ -173,7 +178,6 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub btnClearClipboard_Click(sender As Object, e As EventArgs) Handles btnClearClipboard.Click
     AddMsg("Clear Clipboard")
-    cbContent = ""
     My.Computer.Clipboard.Clear()
     lblCBContents.Text = "<empty>"
     tsslCmd.Text = "Clear Clipboard"
@@ -181,10 +185,8 @@ Public Class Form1
   End Sub
 
   '----------------------------------------------------------------------------
-  Private Sub lbxClipboardBuffer_MouseHover(sender As Object, e As EventArgs)
-    AddMsg("s")
-    ToolTip1.SetToolTip(lbxClipboardBuffer, cbContent)
-    AddMsg("d")
+  Private Sub lbxClipboardBuffer_MouseHover(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.MouseHover
+    ToolTip1.SetToolTip(lblCBContents, currentCBO.Name)
   End Sub
 
   '----------------------------------------------------------------------------
@@ -197,13 +199,17 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles cbxTmrEn.CheckedChanged
     AddMsg("s")
-    tmrEn = cbxTmrEn.Checked
+    tmrEnable = cbxTmrEn.Checked
 
-    Timer1.Enabled = tmrEn
+    Timer1.Enabled = tmrEnable
     AddMsg("d")
   End Sub
 
   Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
 
+  End Sub
+
+  Private Sub lblCBContents_MouseHover(sender As Object, e As EventArgs) Handles lblCBContents.MouseHover
+    ToolTip1.SetToolTip(lbxClipboardBuffer, currentCBO.Name)
   End Sub
 End Class
