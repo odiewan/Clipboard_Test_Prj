@@ -3,8 +3,8 @@ Public Class Form1
   Dim cbData As IDataObject = Clipboard.GetDataObject()
   Dim iCount As Integer
   Dim copyCount As Integer
-  Dim cboBufferList As IList(Of cbObject)
-  Dim cboUniqueList As IList(Of cbObject)
+  Dim cboBufferList As List(Of cbObject)
+  Dim cboUniqueList As List(Of cbObject)
   Dim coUnique As Collection
   Dim currentCBO As cbObject
   Dim tmrEnable As Boolean
@@ -31,7 +31,7 @@ Public Class Form1
       End If
 
     Else
-        totMsg = prfx
+      totMsg = prfx
     End If
 
     Debug.WriteLine(totMsg)
@@ -55,53 +55,79 @@ Public Class Form1
   End Sub
 
   '----------------------------------------------------------------------------
+  Private Sub updateUniqueLbx()
+
+    lbxUniqueBuffer.Items.Clear()
+
+    For Each cbObj As cbObject In cboUniqueList
+      lbxUniqueBuffer.Items.Add(cbObj.WrappedName & " <" & cbObj.Count & ">")
+    Next
+
+  End Sub
+
+
+  '----------------------------------------------------------------------------
   Private Function procNewCBData() As Integer
 
     Dim retVal As Integer
     Dim cbChanged As Boolean = False
     Dim cbDupCnt As Integer = 0
-    Dim cbContentNew As String = My.Computer.Clipboard.GetText()
+    Dim cbContent As String = My.Computer.Clipboard.GetText()
+    Static cbContentOld As String = ""
 
-    If currentCBO.Name <> cbContentNew Then
-      AddMsg("Look for duplicates")
-      For Each cbObj As cbObject In cboBufferList
-        If cbContentNew = cbObj.Name Then
-          cbObj.cboIncCount()
-          cbDupCnt += 1
-          AddMsg("Duplicate found:" & cbObj.Count)
+    If cbContent <> "" Then
+      'AddMsg("Not empty")
+      If cbContent <> cbContentOld Then
+        AddMsg("New: Look for duplicates")
+        currentCBO = New cbObject(cbContent)
+        cbDupCnt = 0
+        For Each cbObj As cbObject In cboBufferList
+          If cbContent = cbObj.Name Then
+            cbObj.cboIncCount()
+            cbDupCnt += 1
+
+            AddMsg("Duplicate found:" & cbObj.Count)
+          Else
+
+          End If
+
+        Next
+
+        AddMsg("New CB content")
+
+        If cbDupCnt = 0 Then
+          AddMsg("Unique CB content: add to ranking list")
+          cboUniqueList.Insert(0, currentCBO)
+          coUnique.Add(currentCBO)
+
+
+        Else
+          AddMsg("Not unique: Don't add, only increment")
+
+
         End If
-      Next
 
-      If cbDupCnt = 0 Then
-        AddMsg("No duplicates found")
-      End If
+        cboBufferList.Insert(0, currentCBO)
+
+        lbxClipboardBuffer.Items.Insert(0, currentCBO.WrappedName)
+
+        lblCBContents.Text = currentCBO.ShortName
 
 
-
-      AddMsg("New CB content")
-      currentCBO = New cbObject(My.Computer.Clipboard.GetText())
-
-      If cbDupCnt = 0 Then
-        AddMsg("Unique CB content: add to ranking list")
-        cboUniqueList.Insert(0, currentCBO)
-        coUnique.Add(currentCBO)
+        copyCount += 1
+        tsslCopyCount.Text = "Copy Count:" & copyCount
+        tsslCOCout.Text = "CO Count:" & coUnique.Count
+        retVal = 1
+        updateUniqueLbx()
       Else
-        AddMsg("Not unique: Don't add, only increment")
+        'AddMsg("nothing new")
+        retVal = 0
       End If
-
-      cboBufferList.Insert(0, currentCBO)
-
-      lbxClipboardBuffer.Items.Insert(0, currentCBO.WrappedName)
-
-      lblCBContents.Text = currentCBO.ShortName
-
-      copyCount += 1
-      tsslCopyCount.Text = "Copy Count:" & copyCount
-      tsslCOCout.Text = "CO Count:" & coUnique.Count
-      retVal = 1
     Else
       retVal = 0
     End If
+    cbContentOld = cbContent
+
     Return retVal
   End Function
 
@@ -218,11 +244,45 @@ Public Class Form1
     AddMsg("d")
   End Sub
 
-  Private Sub Label3_Click(sender As Object, e As EventArgs) Handles Label3.Click
-
-  End Sub
-
   Private Sub lblCBContents_MouseHover(sender As Object, e As EventArgs) Handles lblCBContents.MouseHover
     ToolTip1.SetToolTip(lbxClipboardBuffer, currentCBO.Name)
+  End Sub
+
+  '----------------------------------------------------------------------------
+  '-- DESC: Displays contens of clipboard buffer item to inspect window
+  '--
+  '----------------------------------------------------------------------------
+  Private Sub lbxUniqueBuffer_MouseClick(sender As Object, e As MouseEventArgs) Handles lbxUniqueBuffer.MouseClick
+    Dim idx As Integer = lbxUniqueBuffer.SelectedIndex
+
+    AddMsg("s")
+    AddMsg("Get clipboard buffer item data")
+    extractCBData(idx)
+
+    If currentCBO.Name <> "" Then
+      AddMsg("Copy clipboard buffer item to inspect tab")
+      tbxInspect.Text = currentCBO.Name
+
+    End If
+    AddMsg("d")
+  End Sub
+
+  Private Sub lbxClipboardBuffer_MouseClick(sender As Object, e As MouseEventArgs) Handles lbxClipboardBuffer.MouseClick
+    Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
+
+    AddMsg("s")
+    AddMsg("Get clipboard buffer item data")
+    extractCBData(idx)
+
+    If currentCBO.Name <> "" Then
+      AddMsg("Copy clipboard buffer item to inspect tab")
+      tbxInspect.Text = currentCBO.Name
+
+    End If
+    AddMsg("d")
+  End Sub
+
+  Private Sub splMain_SplitterMoved(sender As Object, e As SplitterEventArgs) Handles splMain.SplitterMoved
+
   End Sub
 End Class
