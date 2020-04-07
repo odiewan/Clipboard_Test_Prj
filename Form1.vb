@@ -31,7 +31,7 @@ Public Class Form1
       End If
 
     Else
-        totMsg = prfx
+      totMsg = prfx
     End If
 
     Debug.WriteLine(totMsg)
