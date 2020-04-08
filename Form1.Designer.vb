@@ -342,7 +342,7 @@ Partial Class Form1
         Me.tbpUnique.Margin = New System.Windows.Forms.Padding(2)
         Me.tbpUnique.Name = "tbpUnique"
         Me.tbpUnique.Padding = New System.Windows.Forms.Padding(2)
-        Me.tbpUnique.Size = New System.Drawing.Size(339, 79)
+        Me.tbpUnique.Size = New System.Drawing.Size(354, 153)
         Me.tbpUnique.TabIndex = 1
         Me.tbpUnique.Text = "Ranked Buffer"
         Me.tbpUnique.UseVisualStyleBackColor = True
@@ -354,7 +354,7 @@ Partial Class Form1
         Me.lbxUniqueBuffer.Location = New System.Drawing.Point(2, 2)
         Me.lbxUniqueBuffer.Margin = New System.Windows.Forms.Padding(2)
         Me.lbxUniqueBuffer.Name = "lbxUniqueBuffer"
-        Me.lbxUniqueBuffer.Size = New System.Drawing.Size(335, 75)
+        Me.lbxUniqueBuffer.Size = New System.Drawing.Size(350, 149)
         Me.lbxUniqueBuffer.TabIndex = 0
         '
         'tpInspect
@@ -364,7 +364,7 @@ Partial Class Form1
         Me.tpInspect.Margin = New System.Windows.Forms.Padding(2)
         Me.tpInspect.Name = "tpInspect"
         Me.tpInspect.Padding = New System.Windows.Forms.Padding(2)
-        Me.tpInspect.Size = New System.Drawing.Size(339, 79)
+        Me.tpInspect.Size = New System.Drawing.Size(354, 153)
         Me.tpInspect.TabIndex = 2
         Me.tpInspect.Text = "Inspect"
         Me.tpInspect.UseVisualStyleBackColor = True
@@ -377,7 +377,7 @@ Partial Class Form1
         Me.tbxInspect.Multiline = True
         Me.tbxInspect.Name = "tbxInspect"
         Me.tbxInspect.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.tbxInspect.Size = New System.Drawing.Size(335, 75)
+        Me.tbxInspect.Size = New System.Drawing.Size(350, 149)
         Me.tbxInspect.TabIndex = 0
         '
         'gbConsole
