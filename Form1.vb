@@ -1,5 +1,8 @@
 ﻿
+Imports System.Drawing.Imaging
+
 Public Class Form1
+
   Dim cbData As IDataObject = Clipboard.GetDataObject()
   Dim iCount As Integer
   Dim copyCount As Integer
@@ -59,6 +62,7 @@ Public Class Form1
 
     lbxUniqueBuffer.Items.Clear()
 
+
     For Each cbObj As cbObject In cboUniqueList
       lbxUniqueBuffer.Items.Add(cbObj.WrappedName & " <" & cbObj.Count & ">")
     Next
@@ -78,8 +82,10 @@ Public Class Form1
     If cbContent <> "" Then
       'AddMsg("Not empty")
       If cbContent <> cbContentOld Then
+        'My.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Asterisk)
+        My.Computer.Audio.Play("C:\Users\Odie\Music\Sounds\Camera Shutter Click.wav")
+
         AddMsg("New: Look for duplicates")
-        currentCBO = New cbObject(cbContent)
         cbDupCnt = 0
         For Each cbObj As cbObject In cboBufferList
           If cbContent = cbObj.Name Then
@@ -95,6 +101,7 @@ Public Class Form1
 
         AddMsg("New CB content")
 
+        currentCBO = New cbObject(cbContent)
         If cbDupCnt = 0 Then
           AddMsg("Unique CB content: add to ranking list")
           cboUniqueList.Insert(0, currentCBO)
@@ -112,6 +119,10 @@ Public Class Form1
         lbxClipboardBuffer.Items.Insert(0, currentCBO.WrappedName)
 
         lblCBContents.Text = currentCBO.ShortName
+
+        If currentCBO.Type = cbObject.CboType.LINK Then
+          lbxLinks.Items.Insert(0, currentCBO.Name)
+        End If
 
 
         copyCount += 1
@@ -133,22 +144,29 @@ Public Class Form1
 
   '----------------------------------------------------------------------------
   Private Sub getClipboardContent()
+    Static ntCnt As Integer = 0
+    Static typeStr As String = "NA"
 
+    If My.Computer.Clipboard.ContainsFileDropList() Then
+      tsslPollStat.Text = "FileDropList"
+    ElseIf My.Computer.Clipboard.ContainsAudio() Then
+      tsslPollStat.Text = "Audio"
 
-    If My.Computer.Clipboard.ContainsText() Then
+    ElseIf My.Computer.Clipboard.ContainsImage() Then
+      tsslPollStat.Text = "Image"
+    ElseIf My.Computer.Clipboard.ContainsText() Then
+
+      tsslPollStat.Text = "Text"
       If procNewCBData() Then
-        tsslCmd.Text = "Text"
-      Else
-        tsslCmd.Text = "Text: No change:"
+        tsslCmd.Text = currentCBO.StatMsg
+        'Else
+        '  tsslCmd.Text = "--:"
       End If
-    ElseIf My.Computer.Clipboard.ContainsData(DataFormats.Html) Then
-      If procNewCBData() Then
-        tsslCmd.Text = "HTML"
-      Else
-        tsslCmd.Text = "HTML: No change:"
-      End If
-    ElseIf My.Computer.Clipboard.ContainsFileDropList() Then
-      tsslCmd.Text = "File Drop List"
+    ElseIf My.Computer.Clipboard.ContainsData(DataFormats.UnicodeText) Then
+      tsslPollStat.Text = "Data"
+
+    Else
+      tsslPollStat.Text = "Unknown"
 
     End If
 
@@ -174,7 +192,10 @@ Public Class Form1
   Private Sub btnClearBuffer_Click(sender As Object, e As EventArgs) Handles btnClearBuffer.Click
     AddMsg("s")
     lbxClipboardBuffer.Items.Clear()
+    lbxUniqueBuffer.Items.Clear()
+    lbxLinks.Items.Clear()
     cboBufferList.Clear()
+    cboUniqueList.Clear()
     lblCBContents.Text = "Clear Buffer"
     AddMsg("d")
   End Sub
@@ -219,6 +240,8 @@ Public Class Form1
     AddMsg("Clear Clipboard")
     My.Computer.Clipboard.Clear()
     lblCBContents.Text = "<empty>"
+    lbxUniqueBuffer.Text = "<empty>"
+    lbxLinks.Text = "<empty>"
     tsslCmd.Text = "Clear Clipboard"
     AddMsg("d")
   End Sub
@@ -280,9 +303,5 @@ Public Class Form1
 
     End If
     AddMsg("d")
-  End Sub
-
-  Private Sub splMain_SplitterMoved(sender As Object, e As SplitterEventArgs) Handles splMain.SplitterMoved
-
   End Sub
 End Class

@@ -1,4 +1,16 @@
-﻿Public Class cbObject
+﻿
+Imports System.Text.RegularExpressions
+
+Public Class cbObject
+  Enum CboType
+    UNDEF
+    TEXT
+    LONGTEXT
+    INT
+    FLOAT
+    LINK
+  End Enum
+
   '----------------------------------------------------------------------------
   Private _Name As String
   Public Property Name() As String
@@ -45,6 +57,29 @@
   End Property
 
   '----------------------------------------------------------------------------
+  Private _ValueAsInt As Integer
+  Public Property ValueAsInt() As Integer
+    Get
+      Return _ValueAsInt
+    End Get
+    Set
+      _ValueAsInt = Value
+    End Set
+  End Property
+
+  '----------------------------------------------------------------------------
+  Private _ValueAsFloat As Integer
+  Public Property ValueAsFloat() As Integer
+    Get
+      Return _ValueAsFloat
+    End Get
+    Set
+      _ValueAsFloat = Value
+    End Set
+  End Property
+
+
+  '----------------------------------------------------------------------------
   Private _Rank As Integer
   Public Property Rank() As Integer
     Get
@@ -67,25 +102,74 @@
   End Property
 
   '----------------------------------------------------------------------------
-  Public sub cboIncCount()
+  Private _Type As CboType
+  Public Property Type() As CboType
+    Get
+      Return _Type
+    End Get
+    Set
+      'TODO det type
+      _Type = Value
+    End Set
+  End Property
+
+
+  '----------------------------------------------------------------------------
+  Private _StatMsg As String
+  Public Property StatMsg() As String
+    Get
+      Return _StatMsg
+    End Get
+    Set
+      'TODO det type
+      _StatMsg = Value
+    End Set
+  End Property
+
+
+  '----------------------------------------------------------------------------
+  Public Sub cboIncCount()
     _Count += 1
-   End Sub
+  End Sub
 
   '----------------------------------------------------------------------------
-  Public sub cboDecCount()
+  Public Sub cboDecCount()
     _Count -= 1
-   End Sub
+  End Sub
 
   '----------------------------------------------------------------------------
-  Public sub cboIncRank()
+  Public Sub cboIncRank()
     _Rank += 1
-   End Sub
+  End Sub
 
   '----------------------------------------------------------------------------
-  Public sub cboDecRank()
+  Public Sub cboDecRank()
     _Rank -= 1
-   End Sub
+  End Sub
+  Public Sub cboGetType()
+    Dim patternLink As String
+    Dim patternEmail As String
+    patternEmail = "http(s)?://([\w+?\.\w+])+([a-zA-Z0-9\~\!\@\#\$\%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?"
 
+    If Regex.IsMatch(_Name, patternEmail) Then
+      _StatMsg = "LINK"
+      _Type = CboType.LINK
+    ElseIf Integer.TryParse(_Name, ValueAsInt) Then
+      _Type = CboType.INT
+      _StatMsg = "INT"
+    ElseIf Double.TryParse(_Name, ValueAsFloat) Then
+      _Type = CboType.FLOAT
+      _StatMsg = "FLOAT"
+
+    ElseIf Name.Length > 80 Then
+      _Type = CboType.LONGTEXT
+      _StatMsg = "LONGTEXT"
+    Else
+      _Type = CboType.TEXT
+      _StatMsg = "Default: TEXT"
+    End If
+    'If _Name Then
+  End Sub
 
   '----------------------------------------------------------------------------
   Public Sub cboWrap()
@@ -103,25 +187,33 @@
     _Name = nName
     _ShortNameLen = 45
     _ShortName = Strings.Left(_Name, _ShortNameLen)
+    _ValueAsInt = 0
+    _ValueAsFloat = 0
     _Count += 1
     _Rank = 0
     cboWrap()
+    cboGetType()
   End Sub
 
   '----------------------------------------------------------------------------
   Public Sub cboInitDef()
     _Name = "Default"
     _ShortNameLen = 45
+    _ValueAsInt = 0
+    _ValueAsFloat = 0
     _ShortName = Strings.Left(_Name, _ShortNameLen)
     _Count = 1
     _Rank = 0
     cboWrap()
+    cboGetType()
   End Sub
 
   '----------------------------------------------------------------------------
   Public Sub cboClear()
     _Name = ""
     _ShortNameLen = 45
+    _ValueAsInt = 0
+    _ValueAsFloat = 0
     _ShortName = ""
     _WrappedName = ""
     _Count = 0
