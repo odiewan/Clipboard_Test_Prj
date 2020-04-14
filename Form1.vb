@@ -82,8 +82,11 @@ Public Class Form1
     If cbContent <> "" Then
       'AddMsg("Not empty")
       If cbContent <> cbContentOld Then
-        'My.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Asterisk)
-        My.Computer.Audio.Play("C:\Users\Odie\Music\Sounds\Camera Shutter Click.wav")
+        If System.IO.File.Exists("C:\Users\Odie\Music\Sounds\Camera Shutter Click.wav") Then
+          My.Computer.Audio.Play("C:\Users\Odie\Music\Sounds\Camera Shutter Click.wav")
+        Else
+          My.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Asterisk)
+        End If
 
         AddMsg("New: Look for duplicates")
         cbDupCnt = 0
@@ -136,7 +139,7 @@ Public Class Form1
       End If
     Else
       retVal = 0
-    End If
+    End If n
     cbContentOld = cbContent
 
     Return retVal
