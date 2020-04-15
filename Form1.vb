@@ -139,7 +139,7 @@ Public Class Form1
       End If
     Else
       retVal = 0
-    End If n
+    End If
     cbContentOld = cbContent
 
     Return retVal
@@ -306,5 +306,9 @@ Public Class Form1
 
     End If
     AddMsg("d")
+  End Sub
+
+  Private Sub splMain_SplitterMoved(sender As Object, e As SplitterEventArgs) Handles splMain.SplitterMoved
+
   End Sub
 End Class

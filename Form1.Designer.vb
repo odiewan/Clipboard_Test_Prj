@@ -47,27 +47,27 @@ Partial Class Form1
     Me.lbxUniqueBuffer = New System.Windows.Forms.ListBox()
     Me.tpInspect = New System.Windows.Forms.TabPage()
     Me.tbxInspect = New System.Windows.Forms.TextBox()
-    Me.gbConsole = New System.Windows.Forms.GroupBox()
-    Me.lbxConsole = New System.Windows.Forms.ListBox()
-    Me.Panel1 = New System.Windows.Forms.Panel()
-    Me.cbxTmrEn = New System.Windows.Forms.CheckBox()
-    Me.btnGetCB = New System.Windows.Forms.Button()
-    Me.btnClearClipboard = New System.Windows.Forms.Button()
-    Me.btnClearBuffer = New System.Windows.Forms.Button()
-    Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
-    Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-    Me.ssMain = New System.Windows.Forms.StatusStrip()
-    Me.tsslStatus = New System.Windows.Forms.ToolStripStatusLabel()
-    Me.tsslCount = New System.Windows.Forms.ToolStripStatusLabel()
-    Me.tsslCmd = New System.Windows.Forms.ToolStripStatusLabel()
-    Me.tsslCopyCount = New System.Windows.Forms.ToolStripStatusLabel()
-    Me.tsslCOCout = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.tpLinks = New System.Windows.Forms.TabPage()
+        Me.lbxLinks = New System.Windows.Forms.ListBox()
+        Me.gbConsole = New System.Windows.Forms.GroupBox()
+        Me.lbxConsole = New System.Windows.Forms.ListBox()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.cbxTmrEn = New System.Windows.Forms.CheckBox()
+        Me.btnGetCB = New System.Windows.Forms.Button()
+        Me.btnClearClipboard = New System.Windows.Forms.Button()
+        Me.btnClearBuffer = New System.Windows.Forms.Button()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.ssMain = New System.Windows.Forms.StatusStrip()
+        Me.tsslStatus = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.tsslCount = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.tsslCmd = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.tsslCopyCount = New System.Windows.Forms.ToolStripStatusLabel()
+        Me.tsslCOCout = New System.Windows.Forms.ToolStripStatusLabel()
         Me.tsslPollStat = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.EventLog1 = New System.Diagnostics.EventLog()
-        Me.tpLinks = New System.Windows.Forms.TabPage()
-        Me.lbxLinks = New System.Windows.Forms.ListBox()
         CType(Me.splMain, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.splMain.Panel1.SuspendLayout()
         Me.splMain.Panel2.SuspendLayout()
@@ -84,21 +84,22 @@ Partial Class Form1
         Me.tbpBufferRaw.SuspendLayout()
         Me.tbpUnique.SuspendLayout()
         Me.tpInspect.SuspendLayout()
+        Me.tpLinks.SuspendLayout()
         Me.gbConsole.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.ssMain.SuspendLayout()
         CType(Me.EventLog1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.tpLinks.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblCBContents
         '
+        Me.lblCBContents.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblCBContents.AutoEllipsis = True
-        Me.lblCBContents.AutoSize = True
-        Me.lblCBContents.Location = New System.Drawing.Point(70, 8)
+        Me.lblCBContents.Location = New System.Drawing.Point(94, 8)
         Me.lblCBContents.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblCBContents.Name = "lblCBContents"
-        Me.lblCBContents.Size = New System.Drawing.Size(33, 13)
+        Me.lblCBContents.Size = New System.Drawing.Size(220, 17)
         Me.lblCBContents.TabIndex = 0
         Me.lblCBContents.Text = "None"
         '
@@ -122,17 +123,19 @@ Partial Class Form1
         'splMain.Panel1
         '
         Me.splMain.Panel1.Controls.Add(Me.Panel3)
+        Me.splMain.Panel1MinSize = 100
         '
         'splMain.Panel2
         '
         Me.splMain.Panel2.Controls.Add(Me.GroupBox1)
-        Me.splMain.Size = New System.Drawing.Size(370, 484)
-        Me.splMain.SplitterDistance = 85
+        Me.splMain.Size = New System.Drawing.Size(318, 372)
+        Me.splMain.SplitterDistance = 100
         Me.splMain.SplitterWidth = 8
         Me.splMain.TabIndex = 3
         '
         'Panel3
         '
+        Me.Panel3.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink
         Me.Panel3.Controls.Add(Me.Label1)
         Me.Panel3.Controls.Add(Me.lblThird)
         Me.Panel3.Controls.Add(Me.lblCBContents)
@@ -147,9 +150,10 @@ Partial Class Form1
         Me.Panel3.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel3.Location = New System.Drawing.Point(0, 0)
         Me.Panel3.Margin = New System.Windows.Forms.Padding(2)
-        Me.Panel3.MinimumSize = New System.Drawing.Size(288, 334)
+        Me.Panel3.MaximumSize = New System.Drawing.Size(0, 100)
+        Me.Panel3.MinimumSize = New System.Drawing.Size(288, 100)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(370, 334)
+        Me.Panel3.Size = New System.Drawing.Size(318, 100)
         Me.Panel3.TabIndex = 11
         '
         'lblThird
@@ -193,7 +197,7 @@ Partial Class Form1
         Me.cbxMostFreq.Location = New System.Drawing.Point(81, 27)
         Me.cbxMostFreq.Margin = New System.Windows.Forms.Padding(2)
         Me.cbxMostFreq.Name = "cbxMostFreq"
-        Me.cbxMostFreq.Size = New System.Drawing.Size(289, 21)
+        Me.cbxMostFreq.Size = New System.Drawing.Size(237, 21)
         Me.cbxMostFreq.TabIndex = 2
         '
         'lblFav1Label
@@ -258,7 +262,7 @@ Partial Class Form1
         Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Size = New System.Drawing.Size(370, 391)
+        Me.GroupBox1.Size = New System.Drawing.Size(318, 264)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Clipboard History"
@@ -269,7 +273,7 @@ Partial Class Form1
         Me.Panel2.Dock = System.Windows.Forms.DockStyle.Fill
         Me.Panel2.Location = New System.Drawing.Point(2, 49)
         Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(366, 340)
+        Me.Panel2.Size = New System.Drawing.Size(314, 213)
         Me.Panel2.TabIndex = 7
         '
         'SplitContainer1
@@ -286,8 +290,8 @@ Partial Class Form1
         'SplitContainer1.Panel2
         '
         Me.SplitContainer1.Panel2.Controls.Add(Me.gbConsole)
-        Me.SplitContainer1.Size = New System.Drawing.Size(366, 340)
-        Me.SplitContainer1.SplitterDistance = 195
+        Me.SplitContainer1.Size = New System.Drawing.Size(314, 213)
+        Me.SplitContainer1.SplitterDistance = 122
         Me.SplitContainer1.SplitterWidth = 3
         Me.SplitContainer1.TabIndex = 6
         '
@@ -298,7 +302,7 @@ Partial Class Form1
         Me.gbBuffer.Location = New System.Drawing.Point(0, 0)
         Me.gbBuffer.Name = "gbBuffer"
         Me.gbBuffer.Padding = New System.Windows.Forms.Padding(2)
-        Me.gbBuffer.Size = New System.Drawing.Size(366, 195)
+        Me.gbBuffer.Size = New System.Drawing.Size(314, 122)
         Me.gbBuffer.TabIndex = 0
         Me.gbBuffer.TabStop = False
         Me.gbBuffer.Text = "Buffer"
@@ -314,7 +318,7 @@ Partial Class Form1
         Me.TabControl1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(362, 178)
+        Me.TabControl1.Size = New System.Drawing.Size(310, 105)
         Me.TabControl1.TabIndex = 7
         '
         'tbpBufferRaw
@@ -324,7 +328,7 @@ Partial Class Form1
         Me.tbpBufferRaw.Margin = New System.Windows.Forms.Padding(2)
         Me.tbpBufferRaw.Name = "tbpBufferRaw"
         Me.tbpBufferRaw.Padding = New System.Windows.Forms.Padding(2)
-        Me.tbpBufferRaw.Size = New System.Drawing.Size(354, 152)
+        Me.tbpBufferRaw.Size = New System.Drawing.Size(302, 79)
         Me.tbpBufferRaw.TabIndex = 0
         Me.tbpBufferRaw.Text = "Buffer"
         Me.tbpBufferRaw.UseVisualStyleBackColor = True
@@ -338,7 +342,7 @@ Partial Class Form1
         Me.lbxClipboardBuffer.Margin = New System.Windows.Forms.Padding(2)
         Me.lbxClipboardBuffer.Name = "lbxClipboardBuffer"
         Me.lbxClipboardBuffer.ScrollAlwaysVisible = True
-        Me.lbxClipboardBuffer.Size = New System.Drawing.Size(350, 148)
+        Me.lbxClipboardBuffer.Size = New System.Drawing.Size(298, 75)
         Me.lbxClipboardBuffer.TabIndex = 6
         '
         'tbpUnique
@@ -386,6 +390,26 @@ Partial Class Form1
         Me.tbxInspect.Size = New System.Drawing.Size(350, 148)
         Me.tbxInspect.TabIndex = 0
         '
+        'tpLinks
+        '
+        Me.tpLinks.Controls.Add(Me.lbxLinks)
+        Me.tpLinks.Location = New System.Drawing.Point(4, 22)
+        Me.tpLinks.Name = "tpLinks"
+        Me.tpLinks.Padding = New System.Windows.Forms.Padding(3)
+        Me.tpLinks.Size = New System.Drawing.Size(354, 152)
+        Me.tpLinks.TabIndex = 3
+        Me.tpLinks.Text = "Links"
+        Me.tpLinks.UseVisualStyleBackColor = True
+        '
+        'lbxLinks
+        '
+        Me.lbxLinks.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.lbxLinks.FormattingEnabled = True
+        Me.lbxLinks.Location = New System.Drawing.Point(3, 3)
+        Me.lbxLinks.Name = "lbxLinks"
+        Me.lbxLinks.Size = New System.Drawing.Size(348, 146)
+        Me.lbxLinks.TabIndex = 0
+        '
         'gbConsole
         '
         Me.gbConsole.Controls.Add(Me.lbxConsole)
@@ -393,7 +417,7 @@ Partial Class Form1
         Me.gbConsole.Location = New System.Drawing.Point(0, 0)
         Me.gbConsole.Name = "gbConsole"
         Me.gbConsole.Padding = New System.Windows.Forms.Padding(2)
-        Me.gbConsole.Size = New System.Drawing.Size(366, 142)
+        Me.gbConsole.Size = New System.Drawing.Size(314, 88)
         Me.gbConsole.TabIndex = 0
         Me.gbConsole.TabStop = False
         Me.gbConsole.Text = "Console"
@@ -404,7 +428,7 @@ Partial Class Form1
         Me.lbxConsole.FormattingEnabled = True
         Me.lbxConsole.Location = New System.Drawing.Point(2, 15)
         Me.lbxConsole.Name = "lbxConsole"
-        Me.lbxConsole.Size = New System.Drawing.Size(362, 125)
+        Me.lbxConsole.Size = New System.Drawing.Size(310, 71)
         Me.lbxConsole.TabIndex = 0
         '
         'Panel1
@@ -416,7 +440,7 @@ Partial Class Form1
         Me.Panel1.Dock = System.Windows.Forms.DockStyle.Top
         Me.Panel1.Location = New System.Drawing.Point(2, 15)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(366, 34)
+        Me.Panel1.Size = New System.Drawing.Size(314, 34)
         Me.Panel1.TabIndex = 6
         '
         'cbxTmrEn
@@ -473,10 +497,10 @@ Partial Class Form1
         '
         Me.ssMain.ImageScalingSize = New System.Drawing.Size(20, 20)
         Me.ssMain.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsslStatus, Me.tsslCount, Me.tsslCmd, Me.tsslCopyCount, Me.tsslCOCout, Me.tsslPollStat, Me.ToolStripStatusLabel1})
-        Me.ssMain.Location = New System.Drawing.Point(0, 462)
+        Me.ssMain.Location = New System.Drawing.Point(0, 350)
         Me.ssMain.Name = "ssMain"
         Me.ssMain.Padding = New System.Windows.Forms.Padding(1, 0, 10, 0)
-        Me.ssMain.Size = New System.Drawing.Size(370, 22)
+        Me.ssMain.Size = New System.Drawing.Size(318, 22)
         Me.ssMain.TabIndex = 4
         Me.ssMain.Text = "StatusStrip1"
         '
@@ -522,42 +546,22 @@ Partial Class Form1
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(119, 15)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(120, 15)
         Me.ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
         '
         'EventLog1
         '
         Me.EventLog1.SynchronizingObject = Me
         '
-        'tpLinks
-        '
-        Me.tpLinks.Controls.Add(Me.lbxLinks)
-        Me.tpLinks.Location = New System.Drawing.Point(4, 22)
-        Me.tpLinks.Name = "tpLinks"
-        Me.tpLinks.Padding = New System.Windows.Forms.Padding(3)
-        Me.tpLinks.Size = New System.Drawing.Size(354, 152)
-        Me.tpLinks.TabIndex = 3
-        Me.tpLinks.Text = "Links"
-        Me.tpLinks.UseVisualStyleBackColor = True
-        '
-        'lbxLinks
-        '
-        Me.lbxLinks.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.lbxLinks.FormattingEnabled = True
-        Me.lbxLinks.Location = New System.Drawing.Point(3, 3)
-        Me.lbxLinks.Name = "lbxLinks"
-        Me.lbxLinks.Size = New System.Drawing.Size(348, 146)
-        Me.lbxLinks.TabIndex = 0
-        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(370, 484)
+        Me.ClientSize = New System.Drawing.Size(318, 372)
         Me.Controls.Add(Me.ssMain)
         Me.Controls.Add(Me.splMain)
         Me.Margin = New System.Windows.Forms.Padding(2)
-        Me.MinimumSize = New System.Drawing.Size(304, 373)
+        Me.MinimumSize = New System.Drawing.Size(334, 373)
         Me.Name = "Form1"
         Me.Text = "Clipboard++"
         Me.splMain.Panel1.ResumeLayout(False)
@@ -578,13 +582,13 @@ Partial Class Form1
         Me.tbpUnique.ResumeLayout(False)
         Me.tpInspect.ResumeLayout(False)
         Me.tpInspect.PerformLayout()
+        Me.tpLinks.ResumeLayout(False)
         Me.gbConsole.ResumeLayout(False)
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.ssMain.ResumeLayout(False)
         Me.ssMain.PerformLayout()
         CType(Me.EventLog1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.tpLinks.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
