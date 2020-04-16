@@ -139,7 +139,7 @@ Public Class Form1
       End If
     Else
       retVal = 0
-    End If n
+    End If
     cbContentOld = cbContent
 
     Return retVal
