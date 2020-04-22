@@ -1,16 +1,24 @@
 ﻿
 Imports System.Drawing.Imaging
+Imports System.Net.Mail
+Imports System.Net.Sockets
+Imports System.Threading
 
 Public Class Form1
 
-  Dim cbData As IDataObject = Clipboard.GetDataObject()
-  Dim iCount As Integer
-  Dim copyCount As Integer
-  Dim cboBufferList As List(Of cbObject)
-  Dim cboUniqueList As List(Of cbObject)
-  Dim coUnique As Collection
-  Dim currentCBO As cbObject
-  Dim tmrEnable As Boolean
+  Private cbData As IDataObject = Clipboard.GetDataObject()
+  Private iCount As Integer
+  Private copyCount As Integer
+  Private cboBufferList As List(Of cbObject)
+  Private cboUniqueList As List(Of cbObject)
+  Private coUnique As Collection
+  Private currentCBO As cbObject
+  Private favoriteCBO As cbObject
+
+  Private gblTmrEnable As Boolean
+  Private gblToEmail00 As String = My.Settings.defaultRx00
+  Private gblToEmail01 As String = My.Settings.defaultRx01
+  Private gblLinkRecipient As String = "Unspecified"
 
   '----------------------------------------------------------------------------
   Private Sub AddMsg(msg As String)
@@ -41,7 +49,18 @@ Public Class Form1
     lbxConsole.Items.Insert(0, totMsg)
   End Sub
 
+  '----------------------------------------------------------------------------
+  Private Sub loadSettings()
+    gblToEmail00 = My.Settings.defaultRx00
+    gblToEmail01 = My.Settings.defaultRx01
+  End Sub
 
+  '----------------------------------------------------------------------------
+  Private Sub updateSettings()
+    My.Settings.defaultRx00 = gblToEmail00
+    My.Settings.defaultRx01 = gblToEmail01
+    AddMsg("Setting updated")
+  End Sub
   '----------------------------------------------------------------------------
   Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     AddMsg("s")
@@ -51,21 +70,69 @@ Public Class Form1
     cboUniqueList = New List(Of cbObject)
     coUnique = New Collection
     currentCBO = New cbObject("")
-    tmrEnable = True
-    Timer1.Enabled = tmrEnable
-    cbxTmrEn.Checked = tmrEnable
+    favoriteCBO = New cbObject("")
+    gblTmrEnable = True
+    Timer1.Enabled = gblTmrEnable
+    cbxTmrEn.Checked = gblTmrEnable
+    AddMsg("gblToEmail00:" & gblToEmail00)
+    AddMsg("gblToEmail01:" & gblToEmail01)
+    cbxEmailTo.Items.Add(gblToEmail00)
+    cbxEmailTo.Items.Add(gblToEmail01)
+
     AddMsg("d")
   End Sub
 
   '----------------------------------------------------------------------------
   Private Sub updateUniqueLbx()
-
+    Dim uniqueCount = cboUniqueList.Count
+    Dim maxCount As Integer = 0
+    Dim count As Integer = 0
+    Dim count1 As Integer = 0
+    Dim countTmp As Integer = 0
+    Dim cboTemp As cbObject
+    Dim idx As Integer = 0
+    Dim jdx As Integer = 0
     lbxUniqueBuffer.Items.Clear()
+    cbxMostFreq.Items.Clear()
 
 
+    'TODO: Sort unique list
+    If uniqueCount > 1 Then
+      While jdx < uniqueCount
+        For idx = 0 To uniqueCount - 2 Step 1
+          count = cboUniqueList.Item(idx).Count
+          count1 = cboUniqueList.Item(idx + 1).Count
+          If count1 > count Then
+            'AddMsg("Jdx:" & jdx & " Idx:" & idx & " swap")
+            cboTemp = cboUniqueList.Item(idx + 1)
+            cboUniqueList.Item(idx + 1) = cboUniqueList.Item(idx)
+            cboUniqueList.Item(idx) = cboTemp
+          Else
+            'AddMsg("Jdx:" & jdx & " Idx:" & idx & " no swap")
+
+          End If
+        Next
+        jdx += 1
+      End While
+      'AddMsg("Done with sort")
+    Else
+
+      AddMsg("uniqueCount <= 1")
+
+    End If
+
+
+
+    lbxUniqueBuffer.Items.Add("<Count> <Data>")
+    idx = 0
     For Each cbObj As cbObject In cboUniqueList
-      lbxUniqueBuffer.Items.Add(cbObj.WrappedName & " <" & cbObj.Count & ">")
+      cbObj.Rank = idx
+      lbxUniqueBuffer.Items.Add(" <" & cbObj.Count & ">" & cbObj.WrappedName)
+      cbxMostFreq.Items.Add(cbObj.Name)
+      idx += 1
     Next
+    cbxMostFreq.SelectedIndex = 0
+    favoriteCBO = cboUniqueList.Item(0)
 
   End Sub
 
@@ -120,6 +187,7 @@ Public Class Form1
         cboBufferList.Insert(0, currentCBO)
 
         lbxClipboardBuffer.Items.Insert(0, currentCBO.WrappedName)
+        updateUniqueLbx()
 
         lblCBContents.Text = currentCBO.ShortName
 
@@ -132,7 +200,6 @@ Public Class Form1
         tsslCopyCount.Text = "Copy Count:" & copyCount
         tsslCOCout.Text = "CO Count:" & coUnique.Count
         retVal = 1
-        updateUniqueLbx()
       Else
         'AddMsg("nothing new")
         retVal = 0
@@ -208,9 +275,9 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub extractCBData(ByVal idx As Integer)
     AddMsg("s")
-    If idx >= 0 Then
+    If idx > 0 Then
       AddMsg("Get CBO index")
-      currentCBO = cboBufferList.Item(idx)
+      currentCBO = cboBufferList.Item(idx - 1)
 
     Else
       AddMsg("Buffer is empty")
@@ -264,9 +331,9 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub CheckBox1_CheckedChanged(sender As Object, e As EventArgs) Handles cbxTmrEn.CheckedChanged
     AddMsg("s")
-    tmrEnable = cbxTmrEn.Checked
+    gblTmrEnable = cbxTmrEn.Checked
 
-    Timer1.Enabled = tmrEnable
+    Timer1.Enabled = gblTmrEnable
     AddMsg("d")
   End Sub
 
@@ -293,6 +360,7 @@ Public Class Form1
     AddMsg("d")
   End Sub
 
+  '----------------------------------------------------------------------------
   Private Sub lbxClipboardBuffer_MouseClick(sender As Object, e As MouseEventArgs) Handles lbxClipboardBuffer.MouseClick
     Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
 
@@ -306,5 +374,75 @@ Public Class Form1
 
     End If
     AddMsg("d")
+  End Sub
+
+  '----------------------------------------------------------------------------
+  Sub createMail(body As String, subj As String)
+    AddMsg("s")
+    Try
+      AddMsg("Create Message")
+      Dim newMsg As New MailMessage()
+      newMsg.From = New MailAddress("odie@odiesystems.com", "Odie")
+      newMsg.To.Add(New MailAddress("odie@odiesystems.com", "Odie"))
+      newMsg.Subject = subj
+      newMsg.Body = body
+
+      'New MailAddress("suzypeterson@mac.com", "Suzy")
+
+      AddMsg("Create SMTP Client")
+      Dim smtpServer As New SmtpClient()
+      Dim userState As Object = newMsg
+      AddMsg("Create Credentials")
+      smtpServer.Credentials = New Net.NetworkCredential("odie@odiesystems.com", "!!Jerome19")
+
+      AddMsg("Set SMTP")
+      smtpServer.Port = 587
+      smtpServer.Host = "smtp.dreamhost.com"
+
+      AddMsg("Set callback")
+      AddHandler smtpServer.SendCompleted, AddressOf sendCompleted
+      AddMsg("Sending...")
+
+      smtpServer.SendAsync(newMsg, userState)
+
+      AddMsg("Msg sent asynchronosly")
+
+    Catch ex As Exception
+      Console.ForegroundColor = ConsoleColor.Red
+      AddMsg("Class -> ClassStorage, Method -> MyContactByMail, Error -> " & ex.Message)
+      Console.WriteLine("Class -> ClassStorage, Method -> MyContactByMail, Error -> " & ex.Message)
+    End Try
+
+
+    AddMsg("d")
+  End Sub
+
+  '----------------------------------------------------------------------------
+  Private Sub btnFwdLink_Click(sender As Object, e As EventArgs) Handles btnFwdLink.Click
+    createMail("This is a test", "Subj: Test")
+  End Sub
+
+  '----------------------------------------------------------------------------
+  Private Sub sendCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.AsyncCompletedEventArgs)
+    Dim tmpStr As String
+    If e.Cancelled Then
+      tmpStr = "Mail send was cancelled"
+      AddMsg(tmpStr)
+      MsgBox(tmpStr, vbOKOnly, "Error")
+    ElseIf e.Error IsNot Nothing Then
+      tmpStr = "Mail failed to send:" + e.Error.Message
+      AddMsg(tmpStr)
+      MsgBox(tmpStr, vbOKOnly, "SMTP Error")
+    Else
+      tmpStr = "Mail Sent"
+      AddMsg(tmpStr)
+      MsgBox(tmpStr, vbOKOnly, "Mail Status")
+    End If
+  End Sub
+
+  Private Sub cbxEmailTo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxEmailTo.SelectedIndexChanged
+    gblLinkRecipient = cbxEmailTo.Items(cbxEmailTo.SelectedIndex)
+    AddMsg("Fwd recipient email set to " & gblLinkRecipient)
+
   End Sub
 End Class

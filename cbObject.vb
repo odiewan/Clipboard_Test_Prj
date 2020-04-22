@@ -35,14 +35,15 @@ Public Class cbObject
 
   '----------------------------------------------------------------------------
   Private _ShortName As String
-  Public Property ShortName() As String
+  Public ReadOnly Property ShortName() As String
     Get
-      _ShortName = Strings.Left(_Name, _ShortNameLen) + "..."
+      If _Name.Length > 80 Then
+        _ShortName = Strings.Left(_Name, _ShortNameLen) + "..."
+      Else
+        _ShortName = _Name
+      End If
       Return _ShortName
     End Get
-    Set
-      _ShortName = Value
-    End Set
   End Property
 
   '----------------------------------------------------------------------------
