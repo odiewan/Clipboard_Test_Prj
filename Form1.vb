@@ -275,9 +275,10 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub extractCBData(ByVal idx As Integer)
     AddMsg("s")
-    If idx > 0 Then
-      AddMsg("Get CBO index")
-      currentCBO = cboBufferList.Item(idx - 1)
+    If cboBufferList.Count > 0 Then
+      AddMsg("Get CBO at index:" & idx)
+      currentCBO = cboBufferList.Item(idx)
+      AddMsg("CBO:" & currentCBO.ShortName)
 
     Else
       AddMsg("Buffer is empty")
@@ -347,22 +348,6 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub lbxUniqueBuffer_MouseClick(sender As Object, e As MouseEventArgs) Handles lbxUniqueBuffer.MouseClick
     Dim idx As Integer = lbxUniqueBuffer.SelectedIndex
-
-    AddMsg("s")
-    AddMsg("Get clipboard buffer item data")
-    extractCBData(idx)
-
-    If currentCBO.Name <> "" Then
-      AddMsg("Copy clipboard buffer item to inspect tab")
-      tbxInspect.Text = currentCBO.Name
-
-    End If
-    AddMsg("d")
-  End Sub
-
-  '----------------------------------------------------------------------------
-  Private Sub lbxClipboardBuffer_MouseClick(sender As Object, e As MouseEventArgs) Handles lbxClipboardBuffer.MouseClick
-    Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
 
     AddMsg("s")
     AddMsg("Get clipboard buffer item data")

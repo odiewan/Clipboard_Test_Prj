@@ -51,6 +51,7 @@ Partial Class Form1
         Me.Panel5 = New System.Windows.Forms.Panel()
         Me.lbxLinks = New System.Windows.Forms.ListBox()
         Me.Panel4 = New System.Windows.Forms.Panel()
+        Me.cbxEmailTo = New System.Windows.Forms.ComboBox()
         Me.btnFwdLink = New System.Windows.Forms.Button()
         Me.gbConsole = New System.Windows.Forms.GroupBox()
         Me.lbxConsole = New System.Windows.Forms.ListBox()
@@ -71,7 +72,6 @@ Partial Class Form1
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.EventLog1 = New System.Diagnostics.EventLog()
-        Me.cbxEmailTo = New System.Windows.Forms.ComboBox()
         CType(Me.splMain, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.splMain.Panel1.SuspendLayout()
         Me.splMain.Panel2.SuspendLayout()
@@ -434,6 +434,16 @@ Partial Class Form1
         Me.Panel4.Size = New System.Drawing.Size(348, 29)
         Me.Panel4.TabIndex = 0
         '
+        'cbxEmailTo
+        '
+        Me.cbxEmailTo.FormattingEnabled = True
+        Me.cbxEmailTo.Location = New System.Drawing.Point(81, 4)
+        Me.cbxEmailTo.Name = "cbxEmailTo"
+        Me.cbxEmailTo.Size = New System.Drawing.Size(262, 21)
+        Me.cbxEmailTo.TabIndex = 1
+        Me.cbxEmailTo.Text = "Select Recipient"
+        Me.ToolTip1.SetToolTip(Me.cbxEmailTo, "Select a recient to fwd copied links")
+        '
         'btnFwdLink
         '
         Me.btnFwdLink.Dock = System.Windows.Forms.DockStyle.Left
@@ -588,16 +598,6 @@ Partial Class Form1
         'EventLog1
         '
         Me.EventLog1.SynchronizingObject = Me
-        '
-        'cbxEmailTo
-        '
-        Me.cbxEmailTo.FormattingEnabled = True
-        Me.cbxEmailTo.Location = New System.Drawing.Point(81, 4)
-        Me.cbxEmailTo.Name = "cbxEmailTo"
-        Me.cbxEmailTo.Size = New System.Drawing.Size(262, 21)
-        Me.cbxEmailTo.TabIndex = 1
-        Me.cbxEmailTo.Text = "Select Recipient"
-        Me.ToolTip1.SetToolTip(Me.cbxEmailTo, "Select a recient to fwd copied links")
         '
         'Form1
         '
