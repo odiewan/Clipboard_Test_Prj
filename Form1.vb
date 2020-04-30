@@ -11,6 +11,7 @@ Public Class Form1
   Private copyCount As Integer
   Private cboBufferList As List(Of cbObject)
   Private cboUniqueList As List(Of cbObject)
+  Private cboFavoriteList As List(Of cbObject)
   Private coUnique As Collection
   Private currentCBO As cbObject
   Private favoriteCBO As cbObject
@@ -68,6 +69,7 @@ Public Class Form1
     iCount = 0
     cboBufferList = New List(Of cbObject)
     cboUniqueList = New List(Of cbObject)
+    cboFavoriteList = New List(Of cbObject)
     coUnique = New Collection
     currentCBO = New cbObject("")
     favoriteCBO = New cbObject("")
