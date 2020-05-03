@@ -1,8 +1,4 @@
-﻿
-Imports System.Drawing.Imaging
-Imports System.Net.Mail
-Imports System.Net.Sockets
-Imports System.Threading
+﻿Imports System.Net.Mail
 
 Public Class Form1
 
@@ -17,9 +13,13 @@ Public Class Form1
   Private favoriteCBO As cbObject
 
   Private gblTmrEnable As Boolean
-  Private gblToEmail00 As String = My.Settings.defaultRx00
-  Private gblToEmail01 As String = My.Settings.defaultRx01
+  Private gblToEmailSuzy As MailAddress
+
+  Private gblToEmailOdie As MailAddress
+  Private gblFromEmailOdie As MailAddress
+
   Private gblLinkRecipient As String = "Unspecified"
+
 
   '----------------------------------------------------------------------------
   Private Sub AddMsg(msg As String)
@@ -50,21 +50,72 @@ Public Class Form1
     lbxConsole.Items.Insert(0, totMsg)
   End Sub
 
+
+  '----------------------------------------------------------------------------
+  Private Sub AddStrVar(var As String)
+    Dim varObj As Object = var
+    Dim varName As String = NameOf(varObj)
+    Dim prfx As String
+    Dim totMsg As String
+
+    '---Get the method name
+    prfx = (New System.Diagnostics.StackTrace).GetFrame(1).GetMethod.Name
+    totMsg = prfx & "->" & varName & ":" & var
+
+    Debug.WriteLine(totMsg)
+    lbxConsole.Items.Insert(0, totMsg)
+
+  End Sub
+
+
+  '----------------------------------------------------------------------------
+  Private Sub AddIntVar(var As Integer)
+    Dim varObj As Object
+    Dim varName As String
+    Dim prfx As String
+    Dim totMsg As String
+
+    '---Get the method name
+    prfx = (New System.Diagnostics.StackTrace).GetFrame(1).GetMethod.Name
+
+    '---Create object with passed argumente
+    varObj = var
+
+    '---Get the variable name
+    varName = NameOf(varObj)
+
+    '---Assemble the complete method
+    totMsg = prfx & "->" & varName & ":" & var
+
+    Debug.WriteLine(totMsg)
+    lbxConsole.Items.Insert(0, totMsg)
+
+  End Sub
+
+
   '----------------------------------------------------------------------------
   Private Sub loadSettings()
-    gblToEmail00 = My.Settings.defaultRx00
-    gblToEmail01 = My.Settings.defaultRx01
+    gblToEmailSuzy = New MailAddress(My.Settings.defaultAdrSuzy.Item(1), My.Settings.defaultAdrSuzy.Item(0))
+    gblToEmailOdie = New MailAddress(My.Settings.defaultAdrOdie.Item(1), My.Settings.defaultAdrOdie.Item(0))
+    gblFromEmailOdie = New MailAddress(My.Settings.defaultAdrOdie.Item(1), My.Settings.defaultAdrOdie.Item(0))
   End Sub
 
   '----------------------------------------------------------------------------
   Private Sub updateSettings()
-    My.Settings.defaultRx00 = gblToEmail00
-    My.Settings.defaultRx01 = gblToEmail01
+    My.Settings.defaultAdrSuzy.Item(0) = gblToEmailSuzy.Address
+    My.Settings.defaultAdrSuzy.Item(1) = gblToEmailSuzy.DisplayName
+    My.Settings.defaultAdrOdie.Item(0) = gblToEmailOdie.Address
+    My.Settings.defaultAdrOdie.Item(1) = gblToEmailOdie.DisplayName
+
+
     AddMsg("Setting updated")
   End Sub
   '----------------------------------------------------------------------------
   Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
     AddMsg("s")
+    AddStrVar("VarTest")
+
+    AddIntVar("121")
     copyCount = 0
     iCount = 0
     cboBufferList = New List(Of cbObject)
@@ -76,12 +127,22 @@ Public Class Form1
     gblTmrEnable = True
     Timer1.Enabled = gblTmrEnable
     cbxTmrEn.Checked = gblTmrEnable
-    AddMsg("gblToEmail00:" & gblToEmail00)
-    AddMsg("gblToEmail01:" & gblToEmail01)
-    cbxEmailTo.Items.Add(gblToEmail00)
-    cbxEmailTo.Items.Add(gblToEmail01)
+    loadSettings()
+    cbxEmailTo.Items.Add(gblToEmailSuzy)
+    cbxEmailTo.Items.Add(gblToEmailOdie)
 
     AddMsg("d")
+  End Sub
+
+  Private Sub updateGui()
+    updateUniqueLbx()
+    If lbxLinks.Items.Count > 0 Then
+      btnFwdLink.Enabled = True
+      cbxEmailTo.Enabled = True
+    Else
+      btnFwdLink.Enabled = False
+      cbxEmailTo.Enabled = False
+    End If
   End Sub
 
   '----------------------------------------------------------------------------
@@ -189,7 +250,6 @@ Public Class Form1
         cboBufferList.Insert(0, currentCBO)
 
         lbxClipboardBuffer.Items.Insert(0, currentCBO.WrappedName)
-        updateUniqueLbx()
 
         lblCBContents.Text = currentCBO.ShortName
 
@@ -202,6 +262,7 @@ Public Class Form1
         tsslCopyCount.Text = "Copy Count:" & copyCount
         tsslCOCout.Text = "CO Count:" & coUnique.Count
         retVal = 1
+        updateGui()
       Else
         'AddMsg("nothing new")
         retVal = 0
@@ -369,8 +430,8 @@ Public Class Form1
     Try
       AddMsg("Create Message")
       Dim newMsg As New MailMessage()
-      newMsg.From = New MailAddress("odie@odiesystems.com", "Odie")
-      newMsg.To.Add(New MailAddress("odie@odiesystems.com", "Odie"))
+      newMsg.From = gblFromEmailOdie
+      newMsg.To.Add(gblToEmailOdie)
       newMsg.Subject = subj
       newMsg.Body = body
 
@@ -406,7 +467,10 @@ Public Class Form1
 
   '----------------------------------------------------------------------------
   Private Sub btnFwdLink_Click(sender As Object, e As EventArgs) Handles btnFwdLink.Click
-    createMail("This is a test", "Subj: Test")
+
+    'createMail("This is a test", "Subj: Test")
+
+    createMail(lbxLinks.Items(0).ToString, "Send a link")
   End Sub
 
   '----------------------------------------------------------------------------
@@ -430,6 +494,10 @@ Public Class Form1
   Private Sub cbxEmailTo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxEmailTo.SelectedIndexChanged
     gblLinkRecipient = cbxEmailTo.Items(cbxEmailTo.SelectedIndex)
     AddMsg("Fwd recipient email set to " & gblLinkRecipient)
+
+  End Sub
+
+  Private Sub lbxLinks_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxLinks.SelectedIndexChanged
 
   End Sub
 End Class
