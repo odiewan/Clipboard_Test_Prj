@@ -222,19 +222,13 @@ Public Class Form1
 
   '----------------------------------------------------------------------------
   Private Sub lbxClipboardBuffer_DoubleClick(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.DoubleClick
-    Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
+    Dim idx As Integer = sender.SelectedIndex
 
     AddMsg("s")
     AddMsg("Get item data")
     extractCBData(idx)
 
-    If currentCBO.Name <> "" Then
-      AddMsg("Assign the CB to the dbl clicked item data")
-      My.Computer.Clipboard.SetText(currentCBO.Name)
-      tsslCmd.Text = currentCBO.Name
-      lblCBContents.Text = currentCBO.ShortName
-
-    End If
+    assignCB()
     AddMsg("d")
   End Sub
 
@@ -308,7 +302,28 @@ Public Class Form1
     AddMsg("d")
   End Sub
 
-  Private Sub splMain_SplitterMoved(sender As Object, e As SplitterEventArgs) Handles splMain.SplitterMoved
+  Private Sub assignCB()
+    If currentCBO.Name <> "" Then
+      AddMsg("Assign the CB to the dbl clicked item data")
+      My.Computer.Clipboard.SetText(currentCBO.Name)
+      tsslCmd.Text = currentCBO.Name
+      lblCBContents.Text = currentCBO.ShortName
+    End If
+  End Sub
+
+
+  Private Sub lbxUniqueBuffer_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxUniqueBuffer.SelectedIndexChanged
+    Dim idx As Integer = sender.SelectedIndex
+
+    AddMsg("Get item data")
+    If idx >= 0 Then
+      AddMsg("Get CBO index")
+      currentCBO = cboUniqueList.Item(idx)
+      assignCB()
+
+    Else
+      AddMsg("Buffer is empty")
+    End If
 
   End Sub
 End Class
