@@ -97,6 +97,7 @@ Public Class Form1
 
             AddMsg("Duplicate found:" & cbObj.Count)
           Else
+            AddMsg("New item")
 
           End If
 
@@ -287,6 +288,7 @@ Public Class Form1
     AddMsg("d")
   End Sub
 
+  '----------------------------------------------------------------------------
   Private Sub lbxClipboardBuffer_MouseClick(sender As Object, e As MouseEventArgs) Handles lbxClipboardBuffer.MouseClick
     Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
 
@@ -302,6 +304,7 @@ Public Class Form1
     AddMsg("d")
   End Sub
 
+  '----------------------------------------------------------------------------
   Private Sub assignCB()
     If currentCBO.Name <> "" Then
       AddMsg("Assign the CB to the dbl clicked item data")
@@ -312,18 +315,81 @@ Public Class Form1
   End Sub
 
 
-  Private Sub lbxUniqueBuffer_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxUniqueBuffer.SelectedIndexChanged
-    Dim idx As Integer = sender.SelectedIndex
+  '----------------------------------------------------------------------------
+  Private Sub lbxUniqueBuffer_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.SelectedIndexChanged, tsmiCopyToClipboard.Click
+    Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
 
     AddMsg("Get item data")
     If idx >= 0 Then
       AddMsg("Get CBO index")
-      currentCBO = cboUniqueList.Item(idx)
+      currentCBO = cboBufferList.Item(idx)
       assignCB()
 
     Else
       AddMsg("Buffer is empty")
     End If
 
+  End Sub
+
+
+  '----------------------------------------------------------------------------
+  Private Sub tsmiCopyToFav01_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav01.Click
+    If lbxClipboardBuffer.SelectedIndex >= 0 Then
+      AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
+    Else
+      AddMsg("Invalid index")
+
+    End If
+  End Sub
+
+  '----------------------------------------------------------------------------
+  Private Sub tsmiCopyToFav02_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav02.Click
+    If lbxClipboardBuffer.SelectedIndex >= 0 Then
+      AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
+    Else
+      AddMsg("Invalid index")
+
+    End If
+  End Sub
+
+  '----------------------------------------------------------------------------
+  Private Sub tsmiCopyToFav03_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav03.Click
+    If lbxClipboardBuffer.SelectedIndex >= 0 Then
+      AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
+    Else
+      AddMsg("Invalid index")
+
+    End If
+  End Sub
+
+  Private Sub tsmiCopyUToClipboard_Click(sender As Object, e As EventArgs) Handles tsmiCopyUToClipboard.Click, lbxUniqueBuffer.SelectedIndexChanged
+
+  End Sub
+
+  Private Sub tsmiUCopyToFav01_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav01.Click
+    If lbxClipboardBuffer.SelectedIndex >= 0 Then
+      AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
+    Else
+      AddMsg("Invalid index")
+
+    End If
+  End Sub
+
+  Private Sub tsmiUCopyToFav02_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav02.Click
+    If lbxUniqueBuffer.SelectedIndex >= 0 Then
+      AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
+    Else
+      AddMsg("Invalid index")
+
+    End If
+  End Sub
+
+  Private Sub tsmiUCopyToFav03_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav03.Click
+    If lbxUniqueBuffer.SelectedIndex >= 0 Then
+      AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
+    Else
+      AddMsg("Invalid index")
+
+    End If
   End Sub
 End Class

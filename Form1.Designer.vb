@@ -47,6 +47,11 @@ Partial Class Form1
         Me.lbxClipboardBuffer = New System.Windows.Forms.ListBox()
         Me.tbpUnique = New System.Windows.Forms.TabPage()
         Me.lbxUniqueBuffer = New System.Windows.Forms.ListBox()
+        Me.cmsBufferMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.tsmiCopyToClipboard = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiCopyToFav01 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiCopyToFav02 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiCopyToFav03 = New System.Windows.Forms.ToolStripMenuItem()
         Me.tpInspect = New System.Windows.Forms.TabPage()
         Me.tbxInspect = New System.Windows.Forms.TextBox()
         Me.tpLinks = New System.Windows.Forms.TabPage()
@@ -70,6 +75,11 @@ Partial Class Form1
         Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
         Me.EventLog1 = New System.Diagnostics.EventLog()
+        Me.cmsUniqueBufferMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.tsmiCopyUToClipboard = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiUCopyToFav01 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiUCopyToFav02 = New System.Windows.Forms.ToolStripMenuItem()
+        Me.tsmiUCopyToFav03 = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.splMain, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.splMain.Panel1.SuspendLayout()
         Me.splMain.Panel2.SuspendLayout()
@@ -87,23 +97,23 @@ Partial Class Form1
         Me.TabControl1.SuspendLayout()
         Me.tbpBufferRaw.SuspendLayout()
         Me.tbpUnique.SuspendLayout()
+        Me.cmsBufferMenu.SuspendLayout()
         Me.tpInspect.SuspendLayout()
         Me.tpLinks.SuspendLayout()
         Me.gbConsole.SuspendLayout()
         Me.Panel1.SuspendLayout()
         Me.ssMain.SuspendLayout()
         CType(Me.EventLog1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.cmsUniqueBufferMenu.SuspendLayout()
         Me.SuspendLayout()
         '
         'lblCBContents
         '
-        Me.lblCBContents.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.lblCBContents.AutoEllipsis = True
         Me.lblCBContents.Location = New System.Drawing.Point(94, 8)
         Me.lblCBContents.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblCBContents.Name = "lblCBContents"
-        Me.lblCBContents.Size = New System.Drawing.Size(370, 17)
+        Me.lblCBContents.Size = New System.Drawing.Size(213, 17)
         Me.lblCBContents.TabIndex = 0
         Me.lblCBContents.Text = "None"
         '
@@ -195,15 +205,13 @@ Partial Class Form1
         '
         'cbxMostFreq
         '
-        Me.cbxMostFreq.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
-            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.cbxMostFreq.DataBindings.Add(New System.Windows.Forms.Binding("Text", Me.CbObjectBindingSource, "Name", True))
         Me.cbxMostFreq.DataSource = Me.CboTypeBindingSource
         Me.cbxMostFreq.FormattingEnabled = True
         Me.cbxMostFreq.Location = New System.Drawing.Point(81, 27)
         Me.cbxMostFreq.Margin = New System.Windows.Forms.Padding(2)
         Me.cbxMostFreq.Name = "cbxMostFreq"
-        Me.cbxMostFreq.Size = New System.Drawing.Size(259, 21)
+        Me.cbxMostFreq.Size = New System.Drawing.Size(226, 21)
         Me.cbxMostFreq.TabIndex = 2
         '
         'CbObjectBindingSource
@@ -373,13 +381,46 @@ Partial Class Form1
         '
         'lbxUniqueBuffer
         '
+        Me.lbxUniqueBuffer.ContextMenuStrip = Me.cmsBufferMenu
         Me.lbxUniqueBuffer.Dock = System.Windows.Forms.DockStyle.Fill
         Me.lbxUniqueBuffer.FormattingEnabled = True
+        Me.lbxUniqueBuffer.HorizontalScrollbar = True
         Me.lbxUniqueBuffer.Location = New System.Drawing.Point(2, 2)
         Me.lbxUniqueBuffer.Margin = New System.Windows.Forms.Padding(2)
         Me.lbxUniqueBuffer.Name = "lbxUniqueBuffer"
         Me.lbxUniqueBuffer.Size = New System.Drawing.Size(298, 75)
         Me.lbxUniqueBuffer.TabIndex = 0
+        '
+        'cmsBufferMenu
+        '
+        Me.cmsBufferMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCopyToClipboard, Me.tsmiCopyToFav01, Me.tsmiCopyToFav02, Me.tsmiCopyToFav03})
+        Me.cmsBufferMenu.Name = "cmsBufferMenu"
+        Me.cmsBufferMenu.Size = New System.Drawing.Size(174, 92)
+        Me.cmsBufferMenu.Text = "Buffer Context Menu"
+        '
+        'tsmiCopyToClipboard
+        '
+        Me.tsmiCopyToClipboard.Name = "tsmiCopyToClipboard"
+        Me.tsmiCopyToClipboard.Size = New System.Drawing.Size(173, 22)
+        Me.tsmiCopyToClipboard.Text = "Copy To Clipboard"
+        '
+        'tsmiCopyToFav01
+        '
+        Me.tsmiCopyToFav01.Name = "tsmiCopyToFav01"
+        Me.tsmiCopyToFav01.Size = New System.Drawing.Size(173, 22)
+        Me.tsmiCopyToFav01.Text = "Copy To Favorite 1"
+        '
+        'tsmiCopyToFav02
+        '
+        Me.tsmiCopyToFav02.Name = "tsmiCopyToFav02"
+        Me.tsmiCopyToFav02.Size = New System.Drawing.Size(173, 22)
+        Me.tsmiCopyToFav02.Text = "Copy To Favorite 2"
+        '
+        'tsmiCopyToFav03
+        '
+        Me.tsmiCopyToFav03.Name = "tsmiCopyToFav03"
+        Me.tsmiCopyToFav03.Size = New System.Drawing.Size(173, 22)
+        Me.tsmiCopyToFav03.Text = "Copy To Favorite 3"
         '
         'tpInspect
         '
@@ -560,12 +601,43 @@ Partial Class Form1
         'ToolStripStatusLabel1
         '
         Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(119, 15)
+        Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(120, 15)
         Me.ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
         '
         'EventLog1
         '
         Me.EventLog1.SynchronizingObject = Me
+        '
+        'cmsUniqueBufferMenu
+        '
+        Me.cmsUniqueBufferMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.tsmiCopyUToClipboard, Me.tsmiUCopyToFav01, Me.tsmiUCopyToFav02, Me.tsmiUCopyToFav03})
+        Me.cmsUniqueBufferMenu.Name = "cmsBufferMenu"
+        Me.cmsUniqueBufferMenu.Size = New System.Drawing.Size(181, 114)
+        '
+        'tsmiCopyUToClipboard
+        '
+        Me.tsmiCopyUToClipboard.Name = "tsmiCopyUToClipboard"
+        Me.tsmiCopyUToClipboard.Overflow = System.Windows.Forms.ToolStripItemOverflow.Always
+        Me.tsmiCopyUToClipboard.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiCopyUToClipboard.Text = "Copy To Clipboard"
+        '
+        'tsmiUCopyToFav01
+        '
+        Me.tsmiUCopyToFav01.Name = "tsmiUCopyToFav01"
+        Me.tsmiUCopyToFav01.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiUCopyToFav01.Text = "Copy To Favorite 1"
+        '
+        'tsmiUCopyToFav02
+        '
+        Me.tsmiUCopyToFav02.Name = "tsmiUCopyToFav02"
+        Me.tsmiUCopyToFav02.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiUCopyToFav02.Text = "Copy To Favorite 2"
+        '
+        'tsmiUCopyToFav03
+        '
+        Me.tsmiUCopyToFav03.Name = "tsmiUCopyToFav03"
+        Me.tsmiUCopyToFav03.Size = New System.Drawing.Size(180, 22)
+        Me.tsmiUCopyToFav03.Text = "Copy To Favorite 3"
         '
         'Form1
         '
@@ -596,6 +668,7 @@ Partial Class Form1
         Me.TabControl1.ResumeLayout(False)
         Me.tbpBufferRaw.ResumeLayout(False)
         Me.tbpUnique.ResumeLayout(False)
+        Me.cmsBufferMenu.ResumeLayout(False)
         Me.tpInspect.ResumeLayout(False)
         Me.tpInspect.PerformLayout()
         Me.tpLinks.ResumeLayout(False)
@@ -605,6 +678,7 @@ Partial Class Form1
         Me.ssMain.ResumeLayout(False)
         Me.ssMain.PerformLayout()
         CType(Me.EventLog1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.cmsUniqueBufferMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -657,4 +731,14 @@ Partial Class Form1
     Friend WithEvents cbxMostFreq As ComboBox
     Friend WithEvents CboTypeBindingSource As BindingSource
     Friend WithEvents CbObjectBindingSource As BindingSource
+    Friend WithEvents cmsBufferMenu As ContextMenuStrip
+    Friend WithEvents tsmiCopyToClipboard As ToolStripMenuItem
+    Friend WithEvents tsmiCopyToFav01 As ToolStripMenuItem
+    Friend WithEvents tsmiCopyToFav02 As ToolStripMenuItem
+    Friend WithEvents tsmiCopyToFav03 As ToolStripMenuItem
+    Friend WithEvents cmsUniqueBufferMenu As ContextMenuStrip
+    Friend WithEvents tsmiCopyUToClipboard As ToolStripMenuItem
+    Friend WithEvents tsmiUCopyToFav01 As ToolStripMenuItem
+    Friend WithEvents tsmiUCopyToFav02 As ToolStripMenuItem
+    Friend WithEvents tsmiUCopyToFav03 As ToolStripMenuItem
 End Class
