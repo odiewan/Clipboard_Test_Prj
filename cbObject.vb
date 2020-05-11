@@ -35,14 +35,15 @@ Public Class cbObject
 
   '----------------------------------------------------------------------------
   Private _ShortName As String
-  Public Property ShortName() As String
+  Public ReadOnly Property ShortName() As String
     Get
-      _ShortName = Strings.Left(_Name, _ShortNameLen) + "..."
+      If _Name.Length > 80 Then
+        _ShortName = Strings.Left(_Name, _ShortNameLen) + "..."
+      Else
+        _ShortName = _Name
+      End If
       Return _ShortName
     End Get
-    Set
-      _ShortName = Value
-    End Set
   End Property
 
   '----------------------------------------------------------------------------
@@ -68,13 +69,13 @@ Public Class cbObject
   End Property
 
   '----------------------------------------------------------------------------
-  Private _ValueAsFloat As Integer
-  Public Property ValueAsFloat() As Integer
+  Private _ValueAsDouble As Double
+  Public Property ValueAsDouble() As Double
     Get
-      Return _ValueAsFloat
+      Return _ValueAsDouble
     End Get
     Set
-      _ValueAsFloat = Value
+      _ValueAsDouble = Value
     End Set
   End Property
 
@@ -157,7 +158,7 @@ Public Class cbObject
     ElseIf Integer.TryParse(_Name, ValueAsInt) Then
       _Type = CboType.INT
       _StatMsg = "INT"
-    ElseIf Double.TryParse(_Name, ValueAsFloat) Then
+    ElseIf Double.TryParse(_Name, ValueAsDouble) Then
       _Type = CboType.FLOAT
       _StatMsg = "FLOAT"
 
@@ -188,7 +189,7 @@ Public Class cbObject
     _ShortNameLen = 45
     _ShortName = Strings.Left(_Name, _ShortNameLen)
     _ValueAsInt = 0
-    _ValueAsFloat = 0
+    _ValueAsDouble = 0
     _Count += 1
     _Rank = 0
     cboWrap()
@@ -200,7 +201,7 @@ Public Class cbObject
     _Name = "Default"
     _ShortNameLen = 45
     _ValueAsInt = 0
-    _ValueAsFloat = 0
+    _ValueAsDouble = 0
     _ShortName = Strings.Left(_Name, _ShortNameLen)
     _Count = 1
     _Rank = 0
@@ -213,7 +214,7 @@ Public Class cbObject
     _Name = ""
     _ShortNameLen = 45
     _ValueAsInt = 0
-    _ValueAsFloat = 0
+    _ValueAsDouble = 0
     _ShortName = ""
     _WrappedName = ""
     _Count = 0
