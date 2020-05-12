@@ -128,8 +128,8 @@ Public Class Form1
     Timer1.Enabled = gblTmrEnable
     cbxTmrEn.Checked = gblTmrEnable
     loadSettings()
-    cbxEmailTo.Items.Add(gblToEmailSuzy)
-    cbxEmailTo.Items.Add(gblToEmailOdie)
+    'cbxEmailTo.Items.Add(gblToEmailSuzy)
+    'cbxEmailTo.Items.Add(gblToEmailOdie)
 
     AddMsg("d")
   End Sub
@@ -137,11 +137,11 @@ Public Class Form1
   Private Sub updateGui()
     updateUniqueLbx()
     If lbxLinks.Items.Count > 0 Then
-      btnFwdLink.Enabled = True
-      cbxEmailTo.Enabled = True
+      'btnFwdLink.Enabled = True
+      'cbxEmailTo.Enabled = True
     Else
-      btnFwdLink.Enabled = False
-      cbxEmailTo.Enabled = False
+      'btnFwdLink.Enabled = False
+      'cbxEmailTo.Enabled = False
     End If
   End Sub
 
@@ -156,7 +156,7 @@ Public Class Form1
     Dim idx As Integer = 0
     Dim jdx As Integer = 0
     lbxUniqueBuffer.Items.Clear()
-    cbxMostFreq.Items.Clear()
+    'cbxMostFreq.Items.Clear()
 
 
     'TODO: Sort unique list
@@ -191,10 +191,10 @@ Public Class Form1
     For Each cbObj As cbObject In cboUniqueList
       cbObj.Rank = idx
       lbxUniqueBuffer.Items.Add(" <" & cbObj.Count & ">" & cbObj.WrappedName)
-      cbxMostFreq.Items.Add(cbObj.Name)
+      'cbxMostFreq.Items.Add(cbObj.Name)
       idx += 1
     Next
-    cbxMostFreq.SelectedIndex = 0
+    'cbxMostFreq.SelectedIndex = 0
     favoriteCBO = cboUniqueList.Item(0)
 
   End Sub
@@ -339,7 +339,7 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub extractCBData(ByVal idx As Integer)
     AddMsg("s")
-    If cboBufferList.Count > 0 Then
+    If cboBufferList.Count > idx Then
       AddMsg("Get CBO at index:" & idx)
       currentCBO = cboBufferList.Item(idx)
       AddMsg("CBO:" & currentCBO.ShortName)
@@ -460,13 +460,13 @@ Public Class Form1
     AddMsg("d")
   End Sub
 
-  '----------------------------------------------------------------------------
-  Private Sub btnFwdLink_Click(sender As Object, e As EventArgs) Handles btnFwdLink.Click
+  ''----------------------------------------------------------------------------
+  'Private Sub btnFwdLink_Click(sender As Object, e As EventArgs) Handles btnFwdLink.Click
 
-    'createMail("This is a test", "Subj: Test")
+  '  'createMail("This is a test", "Subj: Test")
 
-    createMail(lbxLinks.Items(0).ToString, "Send a link")
-  End Sub
+  '  createMail(lbxLinks.Items(0).ToString, "Send a link")
+  'End Sub
 
   '----------------------------------------------------------------------------
   Private Sub sendCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.AsyncCompletedEventArgs)
@@ -486,11 +486,11 @@ Public Class Form1
     End If
   End Sub
 
-  Private Sub cbxEmailTo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxEmailTo.SelectedIndexChanged
-    gblLinkRecipient = cbxEmailTo.Items(cbxEmailTo.SelectedIndex)
-    AddMsg("Fwd recipient email set to " & gblLinkRecipient)
+  'Private Sub cbxEmailTo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxEmailTo.SelectedIndexChanged
+  '  gblLinkRecipient = cbxEmailTo.Items(cbxEmailTo.SelectedIndex)
+  '  AddMsg("Fwd recipient email set to " & gblLinkRecipient)
 
-  End Sub
+  'End Sub
 
   Private Sub lbxLinks_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxLinks.SelectedIndexChanged
 
@@ -508,7 +508,7 @@ Public Class Form1
 
 
   '----------------------------------------------------------------------------
-  Private Sub lbxUniqueBuffer_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.SelectedIndexChanged, tsmiCopyToClipboard.Click
+  Private Sub lbxUniqueBuffer_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.SelectedIndexChanged ', tsmiCopyToClipboard.Click
     Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
 
     AddMsg("Get item data")
@@ -524,64 +524,64 @@ Public Class Form1
   End Sub
 
 
-  '----------------------------------------------------------------------------
-  Private Sub tsmiCopyToFav01_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav01.Click
-    If lbxClipboardBuffer.SelectedIndex >= 0 Then
-      AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
-    Else
-      AddMsg("Invalid index")
+  ''----------------------------------------------------------------------------
+  'Private Sub tsmiCopyToFav01_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav01.Click
+  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
 
-    End If
-  End Sub
+  '  End If
+  'End Sub
 
-  '----------------------------------------------------------------------------
-  Private Sub tsmiCopyToFav02_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav02.Click
-    If lbxClipboardBuffer.SelectedIndex >= 0 Then
-      AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
-    Else
-      AddMsg("Invalid index")
+  ''----------------------------------------------------------------------------
+  'Private Sub tsmiCopyToFav02_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav02.Click
+  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
 
-    End If
-  End Sub
+  '  End If
+  'End Sub
 
-  '----------------------------------------------------------------------------
-  Private Sub tsmiCopyToFav03_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav03.Click
-    If lbxClipboardBuffer.SelectedIndex >= 0 Then
-      AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
-    Else
-      AddMsg("Invalid index")
+  ''----------------------------------------------------------------------------
+  'Private Sub tsmiCopyToFav03_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav03.Click
+  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
 
-    End If
-  End Sub
+  '  End If
+  'End Sub
 
-  Private Sub tsmiCopyUToClipboard_Click(sender As Object, e As EventArgs) Handles tsmiCopyUToClipboard.Click, lbxUniqueBuffer.SelectedIndexChanged
+  'Private Sub tsmiCopyUToClipboard_Click(sender As Object, e As EventArgs) Handles tsmiCopyUToClipboard.Click, lbxUniqueBuffer.SelectedIndexChanged
 
-  End Sub
+  'End Sub
 
-  Private Sub tsmiUCopyToFav01_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav01.Click
-    If lbxClipboardBuffer.SelectedIndex >= 0 Then
-      AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
-    Else
-      AddMsg("Invalid index")
+  'Private Sub tsmiUCopyToFav01_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav01.Click
+  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
 
-    End If
-  End Sub
+  '  End If
+  'End Sub
 
-  Private Sub tsmiUCopyToFav02_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav02.Click
-    If lbxUniqueBuffer.SelectedIndex >= 0 Then
-      AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
-    Else
-      AddMsg("Invalid index")
+  'Private Sub tsmiUCopyToFav02_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav02.Click
+  '  If lbxUniqueBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
 
-    End If
-  End Sub
+  '  End If
+  'End Sub
 
-  Private Sub tsmiUCopyToFav03_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav03.Click
-    If lbxUniqueBuffer.SelectedIndex >= 0 Then
-      AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
-    Else
-      AddMsg("Invalid index")
+  'Private Sub tsmiUCopyToFav03_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav03.Click
+  '  If lbxUniqueBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
 
-    End If
-  End Sub
+  '  End If
+  'End Sub
 End Class
