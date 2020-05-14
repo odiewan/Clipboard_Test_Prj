@@ -336,11 +336,11 @@ Public Class Form1
   '----------------------------------------------------------------------------
   ' Desc: Given the lbx item index, returns the item text
   '----------------------------------------------------------------------------
-  Private Sub extractCBData(ByVal idx As Integer)
+  Private Sub extractCBData(ByRef cboList As List(Of cbObject), ByVal idx As Integer)
     AddMsg("s")
-    If cboBufferList.Count > 0 Then
+    If idx < cboList.Count Then
       AddMsg("Get CBO at index:" & idx)
-      currentCBO = cboBufferList.Item(idx)
+      currentCBO = cboList.Item(idx)
       AddMsg("CBO:" & currentCBO.ShortName)
 
     Else
@@ -357,9 +357,9 @@ Public Class Form1
 
     AddMsg("s")
     AddMsg("Get item data")
-    extractCBData(idx)
+    extractCBData(cboBufferList, idx)
 
-    assignCB()
+    'assignCB()
     AddMsg("d")
   End Sub
 
@@ -408,7 +408,7 @@ Public Class Form1
 
     AddMsg("s")
     AddMsg("Get clipboard buffer item data")
-    extractCBData(idx)
+    extractCBData(cboUniqueList, idx)
 
     If currentCBO.Name <> "" Then
       AddMsg("Copy clipboard buffer item to inspect tab")
