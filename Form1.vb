@@ -353,19 +353,13 @@ Public Class Form1
 
   '----------------------------------------------------------------------------
   Private Sub lbxClipboardBuffer_DoubleClick(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.DoubleClick
-    Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
+    Dim idx As Integer = sender.SelectedIndex
 
     AddMsg("s")
     AddMsg("Get item data")
     extractCBData(idx)
 
-    If currentCBO.Name <> "" Then
-      AddMsg("Assign the CB to the dbl clicked item data")
-      My.Computer.Clipboard.SetText(currentCBO.Name)
-      tsslCmd.Text = currentCBO.Name
-      lblCBContents.Text = currentCBO.ShortName
-
-    End If
+    assignCB()
     AddMsg("d")
   End Sub
 
@@ -498,6 +492,7 @@ Public Class Form1
   End Sub
 
   Private Sub lbxLinks_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxLinks.SelectedIndexChanged
+
 
   End Sub
 End Class
