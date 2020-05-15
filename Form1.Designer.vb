@@ -27,6 +27,7 @@ Partial Class Form1
     Me.Label1 = New System.Windows.Forms.Label()
     Me.splMain = New System.Windows.Forms.SplitContainer()
     Me.Panel3 = New System.Windows.Forms.Panel()
+    Me.cbxMostFreq = New System.Windows.Forms.ComboBox()
     Me.lblThird = New System.Windows.Forms.Label()
     Me.lblFav3Label = New System.Windows.Forms.Label()
     Me.lblSecond = New System.Windows.Forms.Label()
@@ -71,7 +72,6 @@ Partial Class Form1
     Me.ToolStripStatusLabel1 = New System.Windows.Forms.ToolStripStatusLabel()
     Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
     Me.EventLog1 = New System.Diagnostics.EventLog()
-    Me.cbxMostFreq = New System.Windows.Forms.ComboBox()
     CType(Me.splMain, System.ComponentModel.ISupportInitialize).BeginInit()
     Me.splMain.Panel1.SuspendLayout()
     Me.splMain.Panel2.SuspendLayout()
@@ -166,6 +166,16 @@ Partial Class Form1
     Me.Panel3.Name = "Panel3"
     Me.Panel3.Size = New System.Drawing.Size(599, 90)
     Me.Panel3.TabIndex = 11
+    '
+    'cbxMostFreq
+    '
+    Me.cbxMostFreq.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cbxMostFreq.FormattingEnabled = True
+    Me.cbxMostFreq.Location = New System.Drawing.Point(82, 27)
+    Me.cbxMostFreq.Name = "cbxMostFreq"
+    Me.cbxMostFreq.Size = New System.Drawing.Size(513, 21)
+    Me.cbxMostFreq.TabIndex = 11
     '
     'lblThird
     '
@@ -598,14 +608,6 @@ Partial Class Form1
     'EventLog1
     '
     Me.EventLog1.SynchronizingObject = Me
-    '
-    'cbxMostFreq
-    '
-    Me.cbxMostFreq.FormattingEnabled = True
-    Me.cbxMostFreq.Location = New System.Drawing.Point(82, 27)
-    Me.cbxMostFreq.Name = "cbxMostFreq"
-    Me.cbxMostFreq.Size = New System.Drawing.Size(505, 21)
-    Me.cbxMostFreq.TabIndex = 11
     '
     'Form1
     '

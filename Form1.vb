@@ -134,8 +134,15 @@ Public Class Form1
     AddMsg("d")
   End Sub
 
+  Private Sub assignCB()
+    AddMsg("s")
+    My.Computer.Clipboard.SetText(currentCBO.Name)
+    AddMsg("d")
+  End Sub
+
   Private Sub updateGui()
     updateUniqueLbx()
+    lblCBContents.Text = currentCBO.ShortName
     If lbxLinks.Items.Count > 0 Then
       btnFwdLink.Enabled = True
       cbxEmailTo.Enabled = True
@@ -146,8 +153,62 @@ Public Class Form1
   End Sub
 
   '----------------------------------------------------------------------------
+  Private Sub updateBufferLbx()
+    Dim cboListCount = cboBufferList.Count
+    Dim maxCount As Integer = 0
+    Dim count As Integer = 0
+    Dim count1 As Integer = 0
+    Dim countTmp As Integer = 0
+    Dim cboTemp As cbObject
+    Dim idx As Integer = 0
+    Dim jdx As Integer = 0
+    lbxClipboardBuffer.Items.Clear()
+    cbxMostFreq.Items.Clear()
+
+
+    'TODO: Sort unique list
+    If cboListCount > 1 Then
+      While jdx < cboListCount
+        For idx = 0 To cboListCount - 2 Step 1
+          count = cboBufferList.Item(idx).Count
+          count1 = cboBufferList.Item(idx + 1).Count
+          If count1 > count Then
+            'AddMsg("Jdx:" & jdx & " Idx:" & idx & " swap")
+            cboTemp = cboBufferList.Item(idx + 1)
+            cboBufferList.Item(idx + 1) = cboBufferList.Item(idx)
+            cboBufferList.Item(idx) = cboTemp
+          Else
+            'AddMsg("Jdx:" & jdx & " Idx:" & idx & " no swap")
+
+          End If
+        Next
+        jdx += 1
+      End While
+      'AddMsg("Done with sort")
+    Else
+
+      AddMsg("cboListCount <= 1")
+
+    End If
+
+
+
+    lbxClipboardBuffer.Items.Add("<Data>")
+    idx = 0
+    For Each cbObj As cbObject In cboUniqueList
+      cbObj.Rank = idx
+      lbxClipboardBuffer.Items.Add(" <" & cbObj.Count & ">" & cbObj.WrappedName)
+      cbxMostFreq.Items.Add(cbObj.Name)
+      idx += 1
+    Next
+    cbxMostFreq.SelectedIndex = 0
+    favoriteCBO = cboBufferList.Item(0)
+
+  End Sub
+
+  '----------------------------------------------------------------------------
   Private Sub updateUniqueLbx()
-    Dim uniqueCount = cboUniqueList.Count
+    Dim cboListCount = cboUniqueList.Count
     Dim maxCount As Integer = 0
     Dim count As Integer = 0
     Dim count1 As Integer = 0
@@ -160,9 +221,9 @@ Public Class Form1
 
 
     'TODO: Sort unique list
-    If uniqueCount > 1 Then
-      While jdx < uniqueCount
-        For idx = 0 To uniqueCount - 2 Step 1
+    If cboListCount > 1 Then
+      While jdx < cboListCount
+        For idx = 0 To cboListCount - 2 Step 1
           count = cboUniqueList.Item(idx).Count
           count1 = cboUniqueList.Item(idx + 1).Count
           If count1 > count Then
@@ -180,13 +241,13 @@ Public Class Form1
       'AddMsg("Done with sort")
     Else
 
-      AddMsg("uniqueCount <= 1")
+      AddMsg("cboListCount <= 1")
 
     End If
 
 
 
-    lbxUniqueBuffer.Items.Add("<Count> <Data>")
+    'lbxUniqueBuffer.Items.Add("<Count> <Data>")
     idx = 0
     For Each cbObj As cbObject In cboUniqueList
       cbObj.Rank = idx
@@ -251,8 +312,6 @@ Public Class Form1
 
         lbxClipboardBuffer.Items.Insert(0, currentCBO.WrappedName)
 
-        lblCBContents.Text = currentCBO.ShortName
-
         If currentCBO.Type = cbObject.CboType.LINK Then
           lbxLinks.Items.Insert(0, currentCBO.Name)
         End If
@@ -280,14 +339,7 @@ Public Class Form1
     Static ntCnt As Integer = 0
     Static typeStr As String = "NA"
 
-    If My.Computer.Clipboard.ContainsFileDropList() Then
-      tsslPollStat.Text = "FileDropList"
-    ElseIf My.Computer.Clipboard.ContainsAudio() Then
-      tsslPollStat.Text = "Audio"
-
-    ElseIf My.Computer.Clipboard.ContainsImage() Then
-      tsslPollStat.Text = "Image"
-    ElseIf My.Computer.Clipboard.ContainsText() Then
+    If My.Computer.Clipboard.ContainsText() Then
 
       tsslPollStat.Text = "Text"
       If procNewCBData() Then
@@ -295,6 +347,11 @@ Public Class Form1
         'Else
         '  tsslCmd.Text = "--:"
       End If
+    ElseIf My.Computer.Clipboard.ContainsAudio() Then
+      tsslPollStat.Text = "Audio"
+
+    ElseIf My.Computer.Clipboard.ContainsImage() Then
+      tsslPollStat.Text = "Image"
     ElseIf My.Computer.Clipboard.ContainsData(DataFormats.UnicodeText) Then
       tsslPollStat.Text = "Data"
 
@@ -314,7 +371,7 @@ Public Class Form1
   End Sub
 
   '----------------------------------------------------------------------------
-  Private Sub hndlClipboardChanged(sender As Object, e As EventArgs) Handles Timer1.Tick
+  Private Sub hndlClipboardChanged(sender As Object, e As EventArgs) Handles Timer1.Tick, lbxClipboardBuffer.MouseHover
     getClipboardContent()
     iCount += 1
     tsslCount.Text = iCount
@@ -338,7 +395,7 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub extractCBData(ByRef cboList As List(Of cbObject), ByVal idx As Integer)
     AddMsg("s")
-    If idx < cboList.Count Then
+    If idx > -1 And idx < cboList.Count Then
       AddMsg("Get CBO at index:" & idx)
       currentCBO = cboList.Item(idx)
       AddMsg("CBO:" & currentCBO.ShortName)
@@ -350,17 +407,25 @@ Public Class Form1
     AddMsg("d")
   End Sub
 
+  Private Sub setCBData(ByRef cboList As List(Of cbObject), ByVal idx As Integer)
+    AddMsg("s")
+    AddMsg("Get clipboard buffer item data")
+    extractCBData(cboList, idx)
+
+    If currentCBO.Name <> "" Then
+      AddMsg("Copy clipboard buffer item to inspect tab")
+      tbxInspect.Text = currentCBO.Name
+
+    End If
+    updateGui()
+    AddMsg("d")
+  End Sub
 
   '----------------------------------------------------------------------------
   Private Sub lbxClipboardBuffer_DoubleClick(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.DoubleClick
     Dim idx As Integer = sender.SelectedIndex
 
-    AddMsg("s")
-    AddMsg("Get item data")
-    extractCBData(cboBufferList, idx)
-
-    'assignCB()
-    AddMsg("d")
+    setCBData(cboBufferList, idx)
   End Sub
 
   '----------------------------------------------------------------------------
@@ -375,7 +440,7 @@ Public Class Form1
   End Sub
 
   '----------------------------------------------------------------------------
-  Private Sub lbxClipboardBuffer_MouseHover(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.MouseHover
+  Private Sub lbxClipboardBuffer_MouseHover(sender As Object, e As EventArgs)
     ToolTip1.SetToolTip(lblCBContents, currentCBO.Name)
   End Sub
 
@@ -406,16 +471,7 @@ Public Class Form1
   Private Sub lbxUniqueBuffer_MouseClick(sender As Object, e As MouseEventArgs) Handles lbxUniqueBuffer.MouseClick
     Dim idx As Integer = lbxUniqueBuffer.SelectedIndex
 
-    AddMsg("s")
-    AddMsg("Get clipboard buffer item data")
-    extractCBData(cboUniqueList, idx)
-
-    If currentCBO.Name <> "" Then
-      AddMsg("Copy clipboard buffer item to inspect tab")
-      tbxInspect.Text = currentCBO.Name
-
-    End If
-    AddMsg("d")
+    setCBData(cboUniqueList, idx)
   End Sub
 
   '----------------------------------------------------------------------------
@@ -491,8 +547,9 @@ Public Class Form1
 
   End Sub
 
-  Private Sub lbxLinks_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxLinks.SelectedIndexChanged
+  Private Sub lbxClipboardBuffer_Click(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.Click
+    Dim idx As Integer = sender.SelectedIndex
 
-
+    setCBData(cboBufferList, idx)
   End Sub
 End Class
