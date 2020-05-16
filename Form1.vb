@@ -3,10 +3,12 @@
 Public Class Form1
 
   Private cbData As IDataObject = Clipboard.GetDataObject()
+
   Private cbContent As String
   Private iCount As Integer
   Private copyCount As Integer
   Private unkCount As Integer
+
   Private cboBufferList As List(Of cbObject)
   Private cboUniqueList As List(Of cbObject)
   Private cboFavoriteList As List(Of cbObject)
@@ -15,7 +17,9 @@ Public Class Form1
   Private favoriteCBO As cbObject
 
   Private gblTmrEnable As Boolean
+
   Private gblCBLock As Boolean
+
   Private gblToEmailSuzy As MailAddress
 
   Private gblToEmailOdie As MailAddress
@@ -145,10 +149,12 @@ Public Class Form1
     AddMsg("s")
     gblCBLock = True
     My.Computer.Clipboard.SetText(currentCBO.Name)
+
     AddMsg("d")
   End Sub
 
   Private Sub updateGui()
+
 
     lblCBContents.Text = currentCBO.ShortName
 
@@ -161,10 +167,12 @@ Public Class Form1
     Else
       btnFwdLink.Enabled = False
       cbxEmailTo.Enabled = False
+
     End If
   End Sub
 
   '----------------------------------------------------------------------------
+
   Private Sub updateBufferLbx()
     Dim idx As Integer = 0
 
@@ -182,6 +190,7 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub updateUniqueLbx()
     Dim cboListCount = cboUniqueList.Count
+
     Dim maxCount As Integer = 0
     Dim count As Integer = 0
     Dim count1 As Integer = 0
@@ -197,6 +206,7 @@ Public Class Form1
     If cboListCount > 1 Then
       While jdx < cboListCount
         For idx = 0 To cboListCount - 2 Step 1
+
           count = cboUniqueList.Item(idx).Count
           count1 = cboUniqueList.Item(idx + 1).Count
           If count1 > count Then
@@ -213,8 +223,10 @@ Public Class Form1
       End While
       'AddMsg("Done with sort")
     Else
+
       AddMsg("cboListCount <= 1")
     End If
+
 
     idx = 0
     For Each cbObj As cbObject In cboUniqueList
@@ -224,6 +236,7 @@ Public Class Form1
       idx += 1
     Next
     'favoriteCBO = cboUniqueList.Item(0)
+
 
   End Sub
 
@@ -282,7 +295,6 @@ Public Class Form1
         End If
 
 
-
         AddMsg("New CB content")
 
         currentCBO = New cbObject(cbContent)
@@ -295,8 +307,10 @@ Public Class Form1
         copyCount += 1
         retVal = 1
 
+
         updateGui()
         'gblCBLock = False
+
       Else
         'AddMsg("nothing new")
         retVal = 0
@@ -373,10 +387,12 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Sub extractCBData(ByRef cboList As List(Of cbObject), ByVal idx As Integer)
     AddMsg("s")
+
     If idx > -1 And idx < cboList.Count Then
       AddMsg("Get CBO at index:" & idx)
       currentCBO = cboList.Item(idx)
       assignCB()
+
       AddMsg("CBO:" & currentCBO.ShortName)
 
     Else
@@ -472,6 +488,7 @@ Public Class Form1
       AddMsg("Create Credentials")
       smtpServer.Credentials = New Net.NetworkCredential("odie@odiesystems.com", "!!Jerome19")
 
+
       AddMsg("Set SMTP")
       smtpServer.Port = 587
       smtpServer.Host = "smtp.dreamhost.com"
@@ -492,10 +509,56 @@ Public Class Form1
 
 
     AddMsg("d")
+
+  ''----------------------------------------------------------------------------
+  'Private Sub btnFwdLink_Click(sender As Object, e As EventArgs) Handles btnFwdLink.Click
+
+  '  'createMail("This is a test", "Subj: Test")
+
+  '  createMail(lbxLinks.Items(0).ToString, "Send a link")
+  'End Sub
+
+  '----------------------------------------------------------------------------
+  Private Sub sendCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.AsyncCompletedEventArgs)
+    Dim tmpStr As String
+    If e.Cancelled Then
+      tmpStr = "Mail send was cancelled"
+      AddMsg(tmpStr)
+      MsgBox(tmpStr, vbOKOnly, "Error")
+    ElseIf e.Error IsNot Nothing Then
+      tmpStr = "Mail failed to send:" + e.Error.Message
+      AddMsg(tmpStr)
+      MsgBox(tmpStr, vbOKOnly, "SMTP Error")
+    Else
+      tmpStr = "Mail Sent"
+      AddMsg(tmpStr)
+      MsgBox(tmpStr, vbOKOnly, "Mail Status")
+    End If
+  End Sub
+
+  'Private Sub cbxEmailTo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxEmailTo.SelectedIndexChanged
+  '  gblLinkRecipient = cbxEmailTo.Items(cbxEmailTo.SelectedIndex)
+  '  AddMsg("Fwd recipient email set to " & gblLinkRecipient)
+
+  'End Sub
+
+  Private Sub lbxLinks_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxLinks.SelectedIndexChanged
+
+  End Sub
+
+  '----------------------------------------------------------------------------
+  Private Sub assignCB()
+    If currentCBO.Name <> "" Then
+      AddMsg("Assign the CB to the dbl clicked item data")
+      My.Computer.Clipboard.SetText(currentCBO.Name)
+      tsslCmd.Text = currentCBO.Name
+      lblCBContents.Text = currentCBO.ShortName
+    End If
   End Sub
 
   '----------------------------------------------------------------------------
   Private Sub btnFwdLink_Click(sender As Object, e As EventArgs) Handles btnFwdLink.Click
+
 
     'createMail("This is a test", "Subj: Test")
 
@@ -527,10 +590,73 @@ Public Class Form1
   End Sub
 
 
+
   Private Sub lbxUniqueBuffer_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles lbxUniqueBuffer.MouseDoubleClick
     Dim idx As Integer = sender.SelectedIndex
     gblCBLock = True
     setCBData(cboBufferList, idx)
   End Sub
+
+
+  ''----------------------------------------------------------------------------
+  'Private Sub tsmiCopyToFav01_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav01.Click
+  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
+
+  '  End If
+  'End Sub
+
+  ''----------------------------------------------------------------------------
+  'Private Sub tsmiCopyToFav02_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav02.Click
+  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
+
+  '  End If
+  'End Sub
+
+  ''----------------------------------------------------------------------------
+  'Private Sub tsmiCopyToFav03_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav03.Click
+  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
+
+  '  End If
+  'End Sub
+
+  'Private Sub tsmiCopyUToClipboard_Click(sender As Object, e As EventArgs) Handles tsmiCopyUToClipboard.Click, lbxUniqueBuffer.SelectedIndexChanged
+
+  'End Sub
+
+  'Private Sub tsmiUCopyToFav01_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav01.Click
+  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
+
+  '  End If
+  'End Sub
+
+  'Private Sub tsmiUCopyToFav02_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav02.Click
+  '  If lbxUniqueBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
+
+  '  End If
+  'End Sub
+
+  'Private Sub tsmiUCopyToFav03_Click(sender As Object, e As EventArgs) Handles tsmiUCopyToFav03.Click
+  '  If lbxUniqueBuffer.SelectedIndex >= 0 Then
+  '    AddMsg("Selected Index:" & lbxUniqueBuffer.SelectedIndex)
+  '  Else
+  '    AddMsg("Invalid index")
+
+  '  End If
+  'End Sub
 
 End Class
