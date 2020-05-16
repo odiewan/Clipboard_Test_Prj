@@ -145,13 +145,6 @@ Public Class Form1
     AddMsg("d")
   End Sub
 
-  Private Sub assignCB()
-    AddMsg("s")
-    gblCBLock = True
-    My.Computer.Clipboard.SetText(currentCBO.Name)
-
-    AddMsg("d")
-  End Sub
 
   Private Sub updateGui()
 
@@ -510,6 +503,7 @@ Public Class Form1
 
     AddMsg("d")
 
+  End Sub
   ''----------------------------------------------------------------------------
   'Private Sub btnFwdLink_Click(sender As Object, e As EventArgs) Handles btnFwdLink.Click
 
@@ -565,23 +559,6 @@ Public Class Form1
     createMail(lbxLinks.Items(0).ToString, "Send a link")
   End Sub
 
-  '----------------------------------------------------------------------------
-  Private Sub sendCompleted(ByVal sender As Object, ByVal e As System.ComponentModel.AsyncCompletedEventArgs)
-    Dim tmpStr As String
-    If e.Cancelled Then
-      tmpStr = "Mail send was cancelled"
-      AddMsg(tmpStr)
-      MsgBox(tmpStr, vbOKOnly, "Error")
-    ElseIf e.Error IsNot Nothing Then
-      tmpStr = "Mail failed to send:" + e.Error.Message
-      AddMsg(tmpStr)
-      MsgBox(tmpStr, vbOKOnly, "SMTP Error")
-    Else
-      tmpStr = "Mail Sent"
-      AddMsg(tmpStr)
-      MsgBox(tmpStr, vbOKOnly, "Mail Status")
-    End If
-  End Sub
 
   Private Sub cbxEmailTo_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbxEmailTo.SelectedIndexChanged
     gblLinkRecipient = cbxEmailTo.Items(cbxEmailTo.SelectedIndex)
