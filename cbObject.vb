@@ -190,7 +190,7 @@ Public Class cbObject
     _ShortName = Strings.Left(_Name, _ShortNameLen)
     _ValueAsInt = 0
     _ValueAsDouble = 0
-    _Count += 1
+    _Count = 0
     _Rank = 0
     cboWrap()
     cboGetType()

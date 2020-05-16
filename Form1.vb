@@ -3,8 +3,10 @@
 Public Class Form1
 
   Private cbData As IDataObject = Clipboard.GetDataObject()
+  Private cbContent As String
   Private iCount As Integer
   Private copyCount As Integer
+  Private unkCount As Integer
   Private cboBufferList As List(Of cbObject)
   Private cboUniqueList As List(Of cbObject)
   Private cboFavoriteList As List(Of cbObject)
@@ -13,6 +15,7 @@ Public Class Form1
   Private favoriteCBO As cbObject
 
   Private gblTmrEnable As Boolean
+  Private gblCBLock As Boolean
   Private gblToEmailSuzy As MailAddress
 
   Private gblToEmailOdie As MailAddress
@@ -117,7 +120,9 @@ Public Class Form1
 
     AddIntVar("121")
     copyCount = 0
+    unkCount = 0
     iCount = 0
+    cbContent = ""
     cboBufferList = New List(Of cbObject)
     cboUniqueList = New List(Of cbObject)
     cboFavoriteList = New List(Of cbObject)
@@ -125,24 +130,31 @@ Public Class Form1
     currentCBO = New cbObject("")
     favoriteCBO = New cbObject("")
     gblTmrEnable = True
+    gblCBLock = False
     Timer1.Enabled = gblTmrEnable
     cbxTmrEn.Checked = gblTmrEnable
     loadSettings()
     cbxEmailTo.Items.Add(gblToEmailSuzy)
     cbxEmailTo.Items.Add(gblToEmailOdie)
 
+
     AddMsg("d")
   End Sub
 
   Private Sub assignCB()
     AddMsg("s")
+    gblCBLock = True
     My.Computer.Clipboard.SetText(currentCBO.Name)
     AddMsg("d")
   End Sub
 
   Private Sub updateGui()
-    updateUniqueLbx()
+
     lblCBContents.Text = currentCBO.ShortName
+
+    tsslCopyCount.Text = "Copy Count:" & copyCount
+    tsslCOCout.Text = "CO Count:" & coUnique.Count
+
     If lbxLinks.Items.Count > 0 Then
       btnFwdLink.Enabled = True
       cbxEmailTo.Enabled = True
@@ -154,55 +166,16 @@ Public Class Form1
 
   '----------------------------------------------------------------------------
   Private Sub updateBufferLbx()
-    Dim cboListCount = cboBufferList.Count
-    Dim maxCount As Integer = 0
-    Dim count As Integer = 0
-    Dim count1 As Integer = 0
-    Dim countTmp As Integer = 0
-    Dim cboTemp As cbObject
     Dim idx As Integer = 0
-    Dim jdx As Integer = 0
+
     lbxClipboardBuffer.Items.Clear()
-    cbxMostFreq.Items.Clear()
-
-
-    'TODO: Sort unique list
-    If cboListCount > 1 Then
-      While jdx < cboListCount
-        For idx = 0 To cboListCount - 2 Step 1
-          count = cboBufferList.Item(idx).Count
-          count1 = cboBufferList.Item(idx + 1).Count
-          If count1 > count Then
-            'AddMsg("Jdx:" & jdx & " Idx:" & idx & " swap")
-            cboTemp = cboBufferList.Item(idx + 1)
-            cboBufferList.Item(idx + 1) = cboBufferList.Item(idx)
-            cboBufferList.Item(idx) = cboTemp
-          Else
-            'AddMsg("Jdx:" & jdx & " Idx:" & idx & " no swap")
-
-          End If
-        Next
-        jdx += 1
-      End While
-      'AddMsg("Done with sort")
-    Else
-
-      AddMsg("cboListCount <= 1")
-
-    End If
-
-
-
-    lbxClipboardBuffer.Items.Add("<Data>")
     idx = 0
-    For Each cbObj As cbObject In cboUniqueList
+    For Each cbObj As cbObject In cboBufferList
       cbObj.Rank = idx
-      lbxClipboardBuffer.Items.Add(" <" & cbObj.Count & ">" & cbObj.WrappedName)
+      lbxClipboardBuffer.Items.Add(cbObj.WrappedName)
       cbxMostFreq.Items.Add(cbObj.Name)
       idx += 1
     Next
-    cbxMostFreq.SelectedIndex = 0
-    favoriteCBO = cboBufferList.Item(0)
 
   End Sub
 
@@ -240,14 +213,9 @@ Public Class Form1
       End While
       'AddMsg("Done with sort")
     Else
-
       AddMsg("cboListCount <= 1")
-
     End If
 
-
-
-    'lbxUniqueBuffer.Items.Add("<Count> <Data>")
     idx = 0
     For Each cbObj As cbObject In cboUniqueList
       cbObj.Rank = idx
@@ -255,73 +223,80 @@ Public Class Form1
       cbxMostFreq.Items.Add(cbObj.Name)
       idx += 1
     Next
-    cbxMostFreq.SelectedIndex = 0
-    favoriteCBO = cboUniqueList.Item(0)
+    'favoriteCBO = cboUniqueList.Item(0)
 
   End Sub
 
+
+  Private Sub updateBufferList()
+    cboBufferList.Insert(0, currentCBO)
+    updateBufferLbx()
+
+  End Sub
+
+  Private Sub updateUniqueList()
+    Dim cbDupCnt As Integer = 0
+
+    AddMsg("New: Look for duplicates")
+    For Each cbObj As cbObject In cboUniqueList
+      If cbContent = cbObj.Name Then
+        cbObj.cboIncCount()
+        cbDupCnt += 1
+
+        AddMsg("Duplicate found:" & cbObj.Count)
+      End If
+    Next
+
+    If cbDupCnt = 0 Then
+      cboUniqueList.Insert(0, currentCBO)
+      coUnique.Add(currentCBO)
+    End If
+
+
+    updateUniqueLbx()
+  End Sub
+
+  Private Sub updateLinkList()
+    If currentCBO.Type = cbObject.CboType.LINK Then
+      lbxLinks.Items.Insert(0, currentCBO.Name)
+    End If
+
+  End Sub
 
   '----------------------------------------------------------------------------
   Private Function procNewCBData() As Integer
 
     Dim retVal As Integer
     Dim cbChanged As Boolean = False
-    Dim cbDupCnt As Integer = 0
-    Dim cbContent As String = My.Computer.Clipboard.GetText()
+
+    cbContent = My.Computer.Clipboard.GetText()
     Static cbContentOld As String = ""
 
     If cbContent <> "" Then
       'AddMsg("Not empty")
-      If cbContent <> cbContentOld Then
+      If cbContent <> cbContentOld And gblCBLock = False Then
         If System.IO.File.Exists("C:\Users\Odie\Music\Sounds\Camera Shutter Click.wav") Then
           My.Computer.Audio.Play("C:\Users\Odie\Music\Sounds\Camera Shutter Click.wav")
         Else
           My.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Asterisk)
         End If
 
-        AddMsg("New: Look for duplicates")
-        cbDupCnt = 0
-        For Each cbObj As cbObject In cboBufferList
-          If cbContent = cbObj.Name Then
-            cbObj.cboIncCount()
-            cbDupCnt += 1
 
-            AddMsg("Duplicate found:" & cbObj.Count)
-          Else
-
-          End If
-
-        Next
 
         AddMsg("New CB content")
 
         currentCBO = New cbObject(cbContent)
-        If cbDupCnt = 0 Then
-          AddMsg("Unique CB content: add to ranking list")
-          cboUniqueList.Insert(0, currentCBO)
-          coUnique.Add(currentCBO)
 
-
-        Else
-          AddMsg("Not unique: Don't add, only increment")
-
-
-        End If
-
-        cboBufferList.Insert(0, currentCBO)
-
-        lbxClipboardBuffer.Items.Insert(0, currentCBO.WrappedName)
-
-        If currentCBO.Type = cbObject.CboType.LINK Then
-          lbxLinks.Items.Insert(0, currentCBO.Name)
-        End If
+        updateBufferList()
+        updateUniqueList()
+        updateLinkList()
 
 
         copyCount += 1
-        tsslCopyCount.Text = "Copy Count:" & copyCount
-        tsslCOCout.Text = "CO Count:" & coUnique.Count
         retVal = 1
+
         updateGui()
+        'gblCBLock = False
       Else
         'AddMsg("nothing new")
         retVal = 0
@@ -356,7 +331,8 @@ Public Class Form1
       tsslPollStat.Text = "Data"
 
     Else
-      tsslPollStat.Text = "Unknown"
+      unkCount += 1
+      tsslPollStat.Text = "Unknown" & unkCount
 
     End If
 
@@ -375,6 +351,8 @@ Public Class Form1
     getClipboardContent()
     iCount += 1
     tsslCount.Text = iCount
+
+    gblCBLock = False
   End Sub
 
 
@@ -398,6 +376,7 @@ Public Class Form1
     If idx > -1 And idx < cboList.Count Then
       AddMsg("Get CBO at index:" & idx)
       currentCBO = cboList.Item(idx)
+      assignCB()
       AddMsg("CBO:" & currentCBO.ShortName)
 
     Else
@@ -468,7 +447,7 @@ Public Class Form1
   '-- DESC: Displays contens of clipboard buffer item to inspect window
   '--
   '----------------------------------------------------------------------------
-  Private Sub lbxUniqueBuffer_MouseClick(sender As Object, e As MouseEventArgs) Handles lbxUniqueBuffer.MouseClick
+  Private Sub lbxUniqueBuffer_MouseClick(sender As Object, e As MouseEventArgs)
     Dim idx As Integer = lbxUniqueBuffer.SelectedIndex
 
     setCBData(cboUniqueList, idx)
@@ -547,9 +526,11 @@ Public Class Form1
 
   End Sub
 
-  Private Sub lbxClipboardBuffer_Click(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.Click
-    Dim idx As Integer = sender.SelectedIndex
 
+  Private Sub lbxUniqueBuffer_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles lbxUniqueBuffer.MouseDoubleClick
+    Dim idx As Integer = sender.SelectedIndex
+    gblCBLock = True
     setCBData(cboBufferList, idx)
   End Sub
+
 End Class

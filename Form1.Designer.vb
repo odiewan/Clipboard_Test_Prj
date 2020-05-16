@@ -542,7 +542,6 @@ Partial Class Form1
     '
     'Timer1
     '
-    Me.Timer1.Interval = 10
     '
     'NotifyIcon1
     '
