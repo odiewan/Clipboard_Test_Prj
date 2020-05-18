@@ -55,7 +55,7 @@ Partial Class Form1
     Me.Panel4 = New System.Windows.Forms.Panel()
     Me.cbxEmailTo = New System.Windows.Forms.ComboBox()
     Me.btnFwdLink = New System.Windows.Forms.Button()
-r
+
     Me.gbConsole = New System.Windows.Forms.GroupBox()
     Me.lbxConsole = New System.Windows.Forms.ListBox()
     Me.Panel1 = New System.Windows.Forms.Panel()
@@ -641,7 +641,7 @@ r
     'ToolStripStatusLabel1
     '
     Me.ToolStripStatusLabel1.Name = "ToolStripStatusLabel1"
-l1.Size = New System.Drawing.Size(119, 17)
+    Me.ToolStripStatusLabel1.Size = New System.Drawing.Size(119, 17)
 
     Me.ToolStripStatusLabel1.Text = "ToolStripStatusLabel1"
     '
