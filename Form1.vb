@@ -347,7 +347,7 @@ Public Class Form1
   End Sub
 
   '----------------------------------------------------------------------------
-  Private Sub hndlClipboardChanged(sender As Object, e As EventArgs) Handles Timer1.Tick, lbxClipboardBuffer.MouseHover
+  Private Sub hndlClipboardChanged(sender As Object, e As EventArgs) Handles Timer1.Tick
     getClipboardContent()
     iCount += 1
     tsslCount.Text = iCount
@@ -402,8 +402,9 @@ Public Class Form1
 
   '----------------------------------------------------------------------------
   Private Sub lbxClipboardBuffer_DoubleClick(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.DoubleClick
+    AddMsg("DoubleClick")
     Dim idx As Integer = sender.SelectedIndex
-
+    gblCBLock = True
     setCBData(cboBufferList, idx)
   End Sub
 
@@ -527,10 +528,14 @@ Public Class Form1
   End Sub
 
 
-  Private Sub lbxUniqueBuffer_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles lbxUniqueBuffer.MouseDoubleClick
+  Private Sub lbxUniqueBuffer_MouseDoubleClick(sender As Object, e As MouseEventArgs)
+
+  End Sub
+
+  Private Sub lbxUniqueBuffer_DoubleClick(sender As Object, e As EventArgs) Handles lbxUniqueBuffer.DoubleClick
     Dim idx As Integer = sender.SelectedIndex
+    AddMsg("DoubleClick")
     gblCBLock = True
     setCBData(cboBufferList, idx)
   End Sub
-
 End Class
