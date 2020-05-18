@@ -148,7 +148,6 @@ Public Class cbObject
     _Rank -= 1
   End Sub
   Public Sub cboGetType()
-    Dim patternLink As String
     Dim patternEmail As String
     patternEmail = "http(s)?://([\w+?\.\w+])+([a-zA-Z0-9\~\!\@\#\$\%\^\&\*\(\)_\-\=\+\\\/\?\.\:\;\'\,]*)?"
 
