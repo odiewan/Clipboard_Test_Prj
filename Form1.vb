@@ -149,10 +149,12 @@ Public Class Form1
   Private Sub updateGui()
 
 
+    tsslCmd.Text = currentCBO.Name
     lblCBContents.Text = currentCBO.ShortName
 
     tsslCopyCount.Text = "Copy Count:" & copyCount
     tsslCOCout.Text = "CO Count:" & coUnique.Count
+    tsslCount.Text = iCount
 
     If lbxLinks.Items.Count > 0 Then
       btnFwdLink.Enabled = True
@@ -272,48 +274,33 @@ Public Class Form1
   '----------------------------------------------------------------------------
   Private Function procNewCBData() As Integer
 
-    Dim retVal As Integer
-    Dim cbChanged As Boolean = False
-
-    cbContent = My.Computer.Clipboard.GetText()
-    Static cbContentOld As String = ""
-
     If cbContent <> "" Then
       'AddMsg("Not empty")
-      If cbContent <> cbContentOld And gblCBLock = False Then
-        If System.IO.File.Exists("C:\Users\Odie\Music\Sounds\Camera Shutter Click.wav") Then
-          My.Computer.Audio.Play("C:\Users\Odie\Music\Sounds\Camera Shutter Click.wav")
-        Else
-          My.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Asterisk)
-        End If
-
-
-        AddMsg("New CB content")
-
-        currentCBO = New cbObject(cbContent)
-
-        updateBufferList()
-        updateUniqueList()
-        updateLinkList()
-
-
-        copyCount += 1
-        retVal = 1
-
-
-        updateGui()
-        'gblCBLock = False
-
+      If System.IO.File.Exists("C:\Users\Odie\Music\Sounds\Camera Shutter Click.wav") Then
+        My.Computer.Audio.Play("C:\Users\Odie\Music\Sounds\Camera Shutter Click.wav")
       Else
-        'AddMsg("nothing new")
-        retVal = 0
+        My.Computer.Audio.PlaySystemSound(System.Media.SystemSounds.Asterisk)
       End If
-    Else
-      retVal = 0
-    End If
-    cbContentOld = cbContent
 
-    Return retVal
+
+      AddMsg("New CB content")
+
+      currentCBO = New cbObject(cbContent)
+
+      updateBufferList()
+      updateUniqueList()
+      updateLinkList()
+
+
+      copyCount += 1
+
+      updateGui()
+
+      Return 1
+    Else
+      'AddMsg("empty")
+      Return 0
+    End If
   End Function
 
   '----------------------------------------------------------------------------
@@ -322,19 +309,26 @@ Public Class Form1
     Static typeStr As String = "NA"
 
     If My.Computer.Clipboard.ContainsText() Then
+      If cbContent <> My.Computer.Clipboard.GetText() And gblCBLock = False Then
+        cbContent = My.Computer.Clipboard.GetText()
 
-      tsslPollStat.Text = "Text"
-      If procNewCBData() Then
-        tsslCmd.Text = currentCBO.StatMsg
-        'Else
-        '  tsslCmd.Text = "--:"
+        tsslPollStat.Text = "Text"
+        If procNewCBData() Then
+          tsslCmd.Text = currentCBO.StatMsg
+          'Else
+          '  tsslCmd.Text = "--:"
+        End If
       End If
+
     ElseIf My.Computer.Clipboard.ContainsAudio() Then
       tsslPollStat.Text = "Audio"
 
+
     ElseIf My.Computer.Clipboard.ContainsImage() Then
+
       tsslPollStat.Text = "Image"
     ElseIf My.Computer.Clipboard.ContainsData(DataFormats.UnicodeText) Then
+
       tsslPollStat.Text = "Data"
 
     Else
@@ -342,7 +336,6 @@ Public Class Form1
       tsslPollStat.Text = "Unknown" & unkCount
 
     End If
-
 
   End Sub
 
@@ -355,17 +348,13 @@ Public Class Form1
 
   '----------------------------------------------------------------------------
   Private Sub hndlClipboardChanged(sender As Object, e As EventArgs) Handles Timer1.Tick
-    getClipboardContent()
-    iCount += 1
-    tsslCount.Text = iCount
-
-    gblCBLock = False
-
-    If gblCBLock = True Then
-
+    If gblCBLock = False Then
+      getClipboardContent()
       iCount += 1
-    End If
+    Else
 
+    End If
+    gblCBLock = False
 
   End Sub
 
@@ -402,8 +391,19 @@ Public Class Form1
     AddMsg("d")
   End Sub
 
+  '----------------------------------------------------------------------------
+  Private Sub assignCB()
+    If currentCBO.Name <> "" Then
+      AddMsg("Assign the CB to the dbl clicked item data")
+      My.Computer.Clipboard.SetText(currentCBO.Name)
+
+    End If
+  End Sub
+
+  '----------------------------------------------------------------------------
   Private Sub setCBData(ByRef cboList As List(Of cbObject), ByVal idx As Integer)
     AddMsg("s")
+    gblCBLock = True
     AddMsg("Get clipboard buffer item data")
     extractCBData(cboList, idx)
 
@@ -413,6 +413,7 @@ Public Class Form1
 
     End If
     updateGui()
+    gblCBLock = False
     AddMsg("d")
   End Sub
 
@@ -420,7 +421,6 @@ Public Class Form1
   Private Sub lbxClipboardBuffer_DoubleClick(sender As Object, e As EventArgs) Handles lbxClipboardBuffer.DoubleClick
     AddMsg("DoubleClick")
     Dim idx As Integer = sender.SelectedIndex
-    gblCBLock = True
     setCBData(cboBufferList, idx)
   End Sub
 
@@ -458,16 +458,6 @@ Public Class Form1
 
   Private Sub lblCBContents_MouseHover(sender As Object, e As EventArgs) Handles lblCBContents.MouseHover
     ToolTip1.SetToolTip(lbxClipboardBuffer, currentCBO.Name)
-  End Sub
-
-  '----------------------------------------------------------------------------
-  '-- DESC: Displays contens of clipboard buffer item to inspect window
-  '--
-  '----------------------------------------------------------------------------
-  Private Sub lbxUniqueBuffer_MouseClick(sender As Object, e As MouseEventArgs)
-    Dim idx As Integer = lbxUniqueBuffer.SelectedIndex
-
-    setCBData(cboUniqueList, idx)
   End Sub
 
   '----------------------------------------------------------------------------
@@ -522,15 +512,6 @@ Public Class Form1
   'End Sub
 
 
-  '----------------------------------------------------------------------------
-  Private Sub assignCB()
-    If currentCBO.Name <> "" Then
-      AddMsg("Assign the CB to the dbl clicked item data")
-      My.Computer.Clipboard.SetText(currentCBO.Name)
-      tsslCmd.Text = currentCBO.Name
-      lblCBContents.Text = currentCBO.ShortName
-    End If
-  End Sub
 
   '----------------------------------------------------------------------------
   Private Sub btnFwdLink_Click(sender As Object, e As EventArgs) Handles btnFwdLink.Click
@@ -569,40 +550,75 @@ Public Class Form1
   Private Sub lbxUniqueBuffer_DoubleClick(sender As Object, e As EventArgs) Handles lbxUniqueBuffer.DoubleClick
     Dim idx As Integer = sender.SelectedIndex
     AddMsg("DoubleClick")
-    gblCBLock = True
     setCBData(cboBufferList, idx)
   End Sub
 
 
-  ''----------------------------------------------------------------------------
-  'Private Sub tsmiCopyToFav01_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav01.Click
-  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
-  '    AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
-  '  Else
-  '    AddMsg("Invalid index")
+  '----------------------------------------------------------------------------
+  Private Sub tsmiCopyToFav01_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav01.Click
+    Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
+    If idx >= 0 Then
+      AddMsg("Selected Index:" & idx)
 
-  '  End If
-  'End Sub
+      gblCBLock = True
+      AddMsg("Get clipboard buffer item data")
+      extractCBData(cboBufferList, idx)
 
-  ''----------------------------------------------------------------------------
-  'Private Sub tsmiCopyToFav02_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav02.Click
-  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
-  '    AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
-  '  Else
-  '    AddMsg("Invalid index")
+      If currentCBO.Name <> "" Then
+        AddMsg("Copy clipboard buffer item to favorite 1")
+        lblFirst.Text = currentCBO.Name
 
-  '  End If
-  'End Sub
+      End If
+      updateGui()
+    Else
+      AddMsg("Invalid index")
 
-  ''----------------------------------------------------------------------------
-  'Private Sub tsmiCopyToFav03_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav03.Click
-  '  If lbxClipboardBuffer.SelectedIndex >= 0 Then
-  '    AddMsg("Selected Index:" & lbxClipboardBuffer.SelectedIndex)
-  '  Else
-  '    AddMsg("Invalid index")
+    End If
+  End Sub
 
-  '  End If
-  'End Sub
+  '----------------------------------------------------------------------------
+  Private Sub tsmiCopyToFav02_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav02.Click
+    Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
+    If idx >= 0 Then
+      AddMsg("Selected Index:" & idx)
+
+      gblCBLock = True
+      AddMsg("Get clipboard buffer item data")
+      extractCBData(cboBufferList, idx)
+
+      If currentCBO.Name <> "" Then
+        AddMsg("Copy clipboard buffer item to favorite 2")
+        lblSecond.Text = currentCBO.Name
+
+      End If
+      updateGui()
+    Else
+      AddMsg("Invalid index")
+
+    End If
+  End Sub
+
+  '----------------------------------------------------------------------------
+  Private Sub tsmiCopyToFav03_Click(sender As Object, e As EventArgs) Handles tsmiCopyToFav03.Click
+    Dim idx As Integer = lbxClipboardBuffer.SelectedIndex
+    If idx >= 0 Then
+      AddMsg("Selected Index:" & idx)
+
+      gblCBLock = True
+      AddMsg("Get clipboard buffer item data")
+      extractCBData(cboBufferList, idx)
+
+      If currentCBO.Name <> "" Then
+        AddMsg("Copy clipboard buffer item to favorite 3")
+        lblThird.Text = currentCBO.Name
+
+      End If
+      updateGui()
+    Else
+      AddMsg("Invalid index")
+
+    End If
+  End Sub
 
   'Private Sub tsmiCopyUToClipboard_Click(sender As Object, e As EventArgs) Handles tsmiCopyUToClipboard.Click, lbxUniqueBuffer.SelectedIndexChanged
 
