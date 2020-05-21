@@ -360,6 +360,13 @@ Public Class Form1
     tsslCount.Text = iCount
 
     gblCBLock = False
+
+    If gblCBLock = True Then
+
+      iCount += 1
+    End If
+
+
   End Sub
 
 
@@ -514,9 +521,6 @@ Public Class Form1
 
   'End Sub
 
-  Private Sub lbxLinks_SelectedIndexChanged(sender As Object, e As EventArgs) Handles lbxLinks.SelectedIndexChanged
-
-  End Sub
 
   '----------------------------------------------------------------------------
   Private Sub assignCB()
@@ -561,10 +565,6 @@ Public Class Form1
 
   End Sub
 
-
-  Private Sub lbxUniqueBuffer_MouseDoubleClick(sender As Object, e As MouseEventArgs)
-
-  End Sub
 
   Private Sub lbxUniqueBuffer_DoubleClick(sender As Object, e As EventArgs) Handles lbxUniqueBuffer.DoubleClick
     Dim idx As Integer = sender.SelectedIndex
